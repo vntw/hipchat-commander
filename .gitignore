@@ -1,0 +1,14 @@
+.idea/
+
+vendor/
+cache/*
+logs/*
+pkg/*
+
+config/config.yml
+
+!cache/.gitkeep
+!logs/.gitkeep
+
+!pkg/HelloWorld
+!pkg/VoteFood

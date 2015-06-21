@@ -1,0 +1,22 @@
+bot_name: ACME Maid
+
+install:
+  allow_room: false
+  allow_global: true
+
+rooms:
+  - id: 232112 # Some Room
+    packages:
+      - name: voteFood
+        cache_ns: dev
+        restrict:
+          user: [23443]
+          cmd:
+            - name: crawl
+              user: [1337, 8432]
+        options:
+          default_stores:
+            mcd: McDonald's
+            bk: Burger-King
+            sub: Subway
+      - name: helloWorld
