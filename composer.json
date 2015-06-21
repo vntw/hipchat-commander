@@ -13,7 +13,7 @@
       "psr-4": { "Venyii\\HipChatCommander\\Test\\": "tests" }
     },
     "require": {
-        "php": "~5.5",
+        "php": ">=5.5",
         "silex/silex": "~1.2",
         "cilex/console-service-provider": "~1.0.0",
         "symfony/dom-crawler": "~2.6",
