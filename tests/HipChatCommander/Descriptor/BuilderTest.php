@@ -23,7 +23,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('get')
             ->with($this->identicalTo('bot_name'))
-            ->will($this->returnValue(null))
+            ->will($this->returnValue(Builder::DEFAULT_BOT_NAME))
         ;
         $configMock
             ->expects($this->at(1))

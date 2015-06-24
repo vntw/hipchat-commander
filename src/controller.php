@@ -18,13 +18,10 @@ $app->mount('/bot', new Controller\Bot());
 $app->mount('/cb', new Controller\Callback());
 
 $app->get('/package.json', function (HttpFoundation\Request $request) use ($app) {
-    $type = $request->query->has('room') ? 'room' : 'global';
-
     $builder = new DescriptorBuilder(
         $request->getSchemeAndHttpHost().$request->getBaseUrl(),
         $app['hc.config'],
-        $app['hc.package_locator'],
-        $type
+        $app['hc.package_locator']
     );
 
     return new HttpFoundation\JsonResponse($builder->build());

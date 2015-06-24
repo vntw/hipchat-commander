@@ -21,20 +21,17 @@ class Builder
     private $appUrl;
     private $config;
     private $packageLocator;
-    private $type;
 
     /**
      * @param string          $appUrl
      * @param Config          $config
      * @param Package\Locator $packageLocator
-     * @param string          $type
      */
-    public function __construct($appUrl, Config $config, Package\Locator $packageLocator, $type)
+    public function __construct($appUrl, Config $config, Package\Locator $packageLocator)
     {
         $this->appUrl = $appUrl;
         $this->config = $config;
         $this->packageLocator = $packageLocator;
-        $this->type = $type = 'global';
     }
 
     /**
@@ -48,12 +45,6 @@ class Builder
 
         if (empty($packages)) {
             throw new \Exception('No packages were found.');
-        }
-
-        if ($this->type === 'room') {
-            $scopes = ['send_notification', 'view_group'];
-        } else {
-            $scopes = ['send_notification', 'view_group', 'admin_room'];
         }
 
         $descriptor = [
@@ -70,7 +61,7 @@ class Builder
                     'callbackUrl' => $this->appUrl.'/cb/install',
                 ],
                 'hipchatApiConsumer' => [
-                    'scopes' => $scopes,
+                    'scopes' => ['send_notification', 'view_group', 'admin_room'],
                 ],
                 'webhook' => [
                     [
