@@ -64,10 +64,11 @@ class Config
 
     /**
      * @param string $key
+     * @param mixed $default
      *
      * @return mixed
      */
-    public function get($key)
+    public function get($key, $default = null)
     {
         if (strstr($key, '.') !== false) {
             $tmp = $this->options;
@@ -76,14 +77,14 @@ class Config
                 if (isset($tmp[$k])) {
                     $tmp = $tmp[$k];
                 } else {
-                    return null;
+                    return $default;
                 }
             }
 
             return $tmp;
         }
 
-        return isset($this->options[$key]) ? $this->options[$key] : null;
+        return isset($this->options[$key]) ? $this->options[$key] : $default;
     }
 
     private function validate()
@@ -138,7 +139,7 @@ class Config
                     throw new \Exception('Missing default configurations!');
                 }
 
-                // TODO: merge recursive (e.g. restrictions)
+                // recursive merge not supported (e.g. restrictions)
                 $package = array_merge($package, $this->options['defaults'][$package['name']][$package['default']]);
             }
 

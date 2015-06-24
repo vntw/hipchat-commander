@@ -55,9 +55,11 @@ YML;
         $this->assertTrue($this->testInstance->get('install.allow_global'));
     }
 
-    public function testConfigReturnsNullForUnknownKey()
+    public function testConfigReturnsDefaultValueForUnknownKey()
     {
         $this->assertNull($this->testInstance->get('does.not.exist'));
+        $this->assertEquals(12, $this->testInstance->get('does.not.exist', 12));
+        $this->assertEquals('__default__', $this->testInstance->get('does.not.exist', '__default__'));
     }
 
     public function testParsePackages()

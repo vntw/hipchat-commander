@@ -57,7 +57,7 @@ class Builder
         }
 
         $descriptor = [
-            'name' => $this->config->get('bot_name') ?: static::DEFAULT_BOT_NAME,
+            'name' => $this->config->get('bot_name', static::DEFAULT_BOT_NAME),
             'description' => 'A PHP HipChat application',
             'key' => 'de.cersei.hccommander',
             'links' => [
@@ -65,8 +65,8 @@ class Builder
             ],
             'capabilities' => [
                 'installable' => [
-                    'allowRoom' => (bool) $this->config->get('install.allow_room'),
-                    'allowGlobal' => (bool) $this->config->get('install.allow_global'),
+                    'allowRoom' => (bool) $this->config->get('install.allow_room', false),
+                    'allowGlobal' => (bool) $this->config->get('install.allow_global', true),
                     'callbackUrl' => $this->appUrl.'/cb/install',
                 ],
                 'hipchatApiConsumer' => [
