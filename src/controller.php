@@ -12,20 +12,10 @@
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation;
 use Venyii\HipChatCommander\Controller;
-use Venyii\HipChatCommander\Descriptor\Builder as DescriptorBuilder;
 
 $app->mount('/bot', new Controller\Bot());
 $app->mount('/cb', new Controller\Callback());
-
-$app->get('/package.json', function (HttpFoundation\Request $request) use ($app) {
-    $builder = new DescriptorBuilder(
-        $request->getSchemeAndHttpHost().$request->getBaseUrl(),
-        $app['hc.config'],
-        $app['hc.package_locator']
-    );
-
-    return new HttpFoundation\JsonResponse($builder->build());
-});
+$app->mount('', new Controller\Descriptor());
 
 $app->error(function (\Exception $e) use ($app) {
     if ($e instanceof RequestException) {
