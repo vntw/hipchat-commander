@@ -133,7 +133,9 @@ class Registry
      */
     public function getInstalls()
     {
-        return $this->cache->fetch(self::INSTALLS_KEY) ?: [];
+        $installs = $this->cache->fetch(self::INSTALLS_KEY);
+
+        return is_array($installs) ? $installs : [];
     }
 
     /**

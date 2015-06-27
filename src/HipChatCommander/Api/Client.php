@@ -87,12 +87,12 @@ class Client
                     $response = $this->doSend($uri, $data);
                     break;
                 case 429:
-                    // rate limited - fall through
                     $this->logger->warning('Got 429 - Rate limited', [
                         'limit' => $e->getResponse()->getHeader('X-RateLimit-Limit'),
                         'remaining' => $e->getResponse()->getHeader('X-RateLimit-Remaining'),
                         'reset' => $e->getResponse()->getHeader('X-RateLimit-Reset'),
                     ]);
+                    // rate limited - fall through
                 default:
                     throw $e;
             }
@@ -154,17 +154,19 @@ class Client
      */
     public function renewAuthToken($oauthId = null, $oauthSecret = null)
     {
-        $this->logger->debug('Renewing auth token'.($oauthId && $oauthSecret ? '  - with given creds' : null));
+        if ($oauthId === null || $oauthSecret === null) {
+            $this->logger->info('Renewing auth token with existing creds');
 
-        if (!$oauthId || !$oauthSecret) {
             $creds = $this->registry->getClientCredentials($this->clientId);
 
             $oauthId = isset($creds['oauthId']) ? $creds['oauthId'] : null;
             $oauthSecret = isset($creds['oauthSecret']) ? $creds['oauthSecret'] : null;
+        } else {
+            $this->logger->info('Renewing auth token with given creds');
         }
 
-        if (!$oauthId || !$oauthSecret) {
-            throw new \Exception('Missing credentials');
+        if ($oauthId === null || $oauthSecret === null) {
+            throw new \InvalidArgumentException('Missing credentials');
         }
 
         $this->logger->debug('Using: '.$oauthId.' - '.$oauthSecret);

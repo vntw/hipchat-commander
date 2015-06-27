@@ -12,6 +12,7 @@
 namespace Venyii\HipChatCommander\Controller;
 
 use Silex\Application;
+use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class Callback implements ControllerProviderInterface
      */
     public function connect(Application $app)
     {
-        /* @var $router Application */
+        /* @var $router ControllerCollection */
         $router = $app['controllers_factory'];
 
         $router->post('/install', array($this, 'installAction'));
@@ -48,23 +49,23 @@ class Callback implements ControllerProviderInterface
     {
         $installer = json_decode($request->getContent(), true);
 
-        $app['logger']->debug('Install Callback');
+        $app['logger']->info('Install Callback');
 
         if (json_last_error()) {
             $app['logger']->error('Install JSON Error: '.json_last_error_msg());
             throw new \Exception('JSON Error');
         }
 
-        $oauthId = isset($installer['oauthId']) ? $installer['oauthId'] : null;
-        $oauthSecret = isset($installer['oauthSecret']) ? $installer['oauthSecret'] : null;
-        $groupId = isset($installer['groupId']) ? (int) $installer['groupId'] : null;
-        $roomId = isset($installer['roomId']) ? (int) $installer['roomId'] : null;
+        $oauthId = isset($installer['oauthId']) && $installer['oauthId'] !== '' ? $installer['oauthId'] : null;
+        $oauthSecret = isset($installer['oauthSecret']) && $installer['oauthSecret'] !== '' ? $installer['oauthSecret'] : null;
+        $groupId = isset($installer['groupId']) && $installer['groupId'] !== '' ? (int) $installer['groupId'] : null;
+        $roomId = isset($installer['roomId']) && $installer['roomId'] !== '' ? (int) $installer['roomId'] : null;
 
-        if (!$oauthId || !$oauthSecret || !$groupId) {
+        if ($oauthId === null || $oauthSecret === null || $groupId === null) {
             throw new \Exception('Invalid installation request');
         }
 
-        $app['logger']->debug(sprintf('Got oauthId %s and oauthSecret: %s', $oauthId, $oauthSecret));
+        $app['logger']->debug(sprintf('Got oauthId "%s" and oauthSecret "%s"', $oauthId, $oauthSecret));
 
         /* @var Registry $registry */
         $registry = $app['hc.api_registry'];
@@ -76,7 +77,7 @@ class Callback implements ControllerProviderInterface
         try {
             // fetch auth token
             $authToken = $client->renewAuthToken($oauthId, $oauthSecret);
-            $app['logger']->debug('Got AuthToken: '.$authToken);
+            $app['logger']->debug(sprintf('Got authToken "%s"', $authToken));
         } catch (\Exception $e) {
             $registry->uninstall($oauthId);
 

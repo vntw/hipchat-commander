@@ -12,6 +12,7 @@
 namespace Venyii\HipChatCommander\Controller;
 
 use Silex\Application;
+use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class Bot implements ControllerProviderInterface
      */
     public function connect(Application $app)
     {
-        /* @var $router Application */
+        /* @var $router ControllerCollection */
         $router = $app['controllers_factory'];
 
         $router->post('/addon', array($this, 'addonBotAction'));
@@ -119,7 +120,7 @@ class Bot implements ControllerProviderInterface
         }
 
         if ($argument === null) {
-            $apiRequest->setDefaultArg($package->getDefaultCommand());
+            $apiRequest->setDefaultArg($package->getDefaultCommand()->getName());
         }
 
         if (!$roomPackage->isUserPermitted($apiRequest->getUser()->getId(), $command->getName())) {

@@ -48,7 +48,7 @@ class CallbackTest extends WebTestCase
         $client->request('POST', '/cb/install', [], [], [], json_encode($data));
         $response = $client->getResponse();
 
-        $this->assertLoggerHasRecord('Got AuthToken: __authToken__', Logger::DEBUG);
+        $this->assertLoggerHasRecord('Got authToken "__authToken__"', Logger::DEBUG);
         $this->assertEquals(200, $response->getStatusCode());
 
         $creds = $this->app['hc.api_registry']->getClient('__oauthId__');
@@ -105,7 +105,7 @@ class CallbackTest extends WebTestCase
         $client->request('POST', '/cb/install', [], [], [], json_encode($data));
         $response = $client->getResponse();
 
-        $this->assertLoggerHasRecord('Got AuthToken: __authToken__', Logger::DEBUG);
+        $this->assertLoggerHasRecord('Got authToken "__authToken__"', Logger::DEBUG);
         $this->assertEquals(200, $response->getStatusCode());
 
         $creds = $this->app['hc.api_registry']->getClient('__oauthId__');
