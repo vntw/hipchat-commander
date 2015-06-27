@@ -56,10 +56,10 @@ class Callback implements ControllerProviderInterface
             throw new \Exception('JSON Error');
         }
 
-        $oauthId = isset($installer['oauthId']) && $installer['oauthId'] !== '' ? $installer['oauthId'] : null;
-        $oauthSecret = isset($installer['oauthSecret']) && $installer['oauthSecret'] !== '' ? $installer['oauthSecret'] : null;
-        $groupId = isset($installer['groupId']) && $installer['groupId'] !== '' ? (int) $installer['groupId'] : null;
-        $roomId = isset($installer['roomId']) && $installer['roomId'] !== '' ? (int) $installer['roomId'] : null;
+        $oauthId = $this->getInstallValue($installer, 'oauthId');
+        $oauthSecret = $this->getInstallValue($installer, 'oauthSecret');
+        $groupId = $this->getInstallValue($installer, 'groupId', true);
+        $roomId = $this->getInstallValue($installer, 'roomId', true);
 
         if ($oauthId === null || $oauthSecret === null || $groupId === null) {
             throw new \Exception('Invalid installation request');
@@ -107,5 +107,23 @@ class Callback implements ControllerProviderInterface
         }
 
         return new Response(null, 200);
+    }
+
+    /**
+     * @param array  $installer
+     * @param string $value
+     * @param bool   $asInt
+     *
+     * @return null|string
+     */
+    private function getInstallValue(array $installer, $value, $asInt = false)
+    {
+        if (!isset($installer[$value]) || trim($installer[$value]) === '') {
+            return null;
+        }
+
+        $value = trim($installer[$value]);
+
+        return $asInt ? (int) $value : $value;
     }
 }

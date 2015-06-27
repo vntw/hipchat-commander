@@ -102,7 +102,7 @@ class Response
      * @param string      $message
      * @param string|null $format
      * @param string|null $color
-     * @param bool|null $notify
+     * @param bool|null   $notify
      *
      * @return Response
      */
