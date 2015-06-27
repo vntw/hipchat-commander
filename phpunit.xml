@@ -20,9 +20,8 @@
     </testsuites>
 
     <filter>
-        <blacklist>
-            <directory>./vendor</directory>
-            <directory>./tests</directory>
-        </blacklist>
+        <whitelist>
+            <directory>./src/HipChatCommander/</directory>
+        </whitelist>
     </filter>
 </phpunit>
