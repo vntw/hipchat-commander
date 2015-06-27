@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/venyii/hipchat-commander.svg?branch=master)](https://travis-ci.org/venyii/hipchat-commander)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/venyii/hipchat-commander/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/venyii/hipchat-commander/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/venyii/hipchat-commander/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/venyii/hipchat-commander/?branch=master)
 
 This PHP bot application allows you to build custom packages (which include commands) that will interact with
 your [HipChat][1] users.
