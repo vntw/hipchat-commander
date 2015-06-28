@@ -38,7 +38,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock(), 'global');
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock()->getPackages());
         $desc = $builder->build();
 
         $this->assertSame($builder::DEFAULT_BOT_NAME, $desc['name']);
@@ -71,15 +71,21 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo('install.allow_global'))
             ->will($this->returnValue(true))
         ;
+        $configMock
+            ->expects($this->at(3))
+            ->method('get')
+            ->with($this->identicalTo('install.use_webhook_pattern'))
+            ->will($this->returnValue(false))
+        ;
 
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock(), 'global');
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock()->getPackages());
         $desc = $builder->build();
 
         $this->assertSame('ACME Bot', $desc['name']);
         $this->assertArrayHasKey('description', $desc);
         $this->assertArrayHasKey('key', $desc);
         $this->assertSame('https://commander.com/package.json', $desc['links']['self']);
-        $this->assertSame('^\/(package1|package2|package3)', $desc['capabilities']['webhook'][0]['pattern']);
+        $this->assertArrayNotHasKey('pattern', $desc['capabilities']['webhook'][0]);
         $this->assertTrue($desc['capabilities']['installable']['allowRoom']);
         $this->assertTrue($desc['capabilities']['installable']['allowGlobal']);
     }
@@ -91,7 +97,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testNoPackagesThrowsException()
     {
         $configMock = $this->getMock('\Venyii\HipChatCommander\Config\Config', [], [], '', false);
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock(true), 'global');
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock(true)->getPackages());
         $builder->build();
     }
 

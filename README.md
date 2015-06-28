@@ -11,9 +11,12 @@ your [HipChat][1] users.
 Check the ```config/config.yml.dist``` file as an example.
 
 * ```bot_name``` _(optional, string, default: "HC Commander")_ The name of the bot that will write messages in the chat.
-* ```install``` _(optional, object)_ Control whether the bot may be installed in a room, globally or both.
-    * ```allow_room``` _(bool, default: false)_
-    * ```allow_global``` _(bool, default: true)_
+* ```install``` _(optional, object)_
+    * ```allow_room``` _(bool, default: false)_ Allow this application to be installed in a room
+    * ```allow_global``` _(bool, default: true)_ Allow this application to be installed globally
+    * ```use_webhook_pattern``` _(bool, default: true)_ Define whether every HipChat message is sent to this application.
+If enabled, only messages that match a package name or alias from your configuration will be sent to the application. That
+means, that if you add, remove or change a package (or aliases), you have to reinstall the application as a HipChat integration.
 * ```packages``` _(array)_ An array of packages (namespace of the ```Package.php``` file) that you´d like to use
 in your rooms.
 * ```rooms``` _(required, array)_

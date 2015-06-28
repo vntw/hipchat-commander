@@ -20,18 +20,18 @@ class Builder
 
     private $appUrl;
     private $config;
-    private $packageLocator;
+    private $packages;
 
     /**
      * @param string          $appUrl
      * @param Config          $config
-     * @param Package\Locator $packageLocator
+     * @param array           $packages
      */
-    public function __construct($appUrl, Config $config, Package\Locator $packageLocator)
+    public function __construct($appUrl, Config $config, array $packages)
     {
         $this->appUrl = $appUrl;
         $this->config = $config;
-        $this->packageLocator = $packageLocator;
+        $this->packages = $packages;
     }
 
     /**
@@ -41,9 +41,7 @@ class Builder
      */
     public function build()
     {
-        $packages = $this->packageLocator->getPackages();
-
-        if (empty($packages)) {
+        if (empty($this->packages)) {
             throw new \Exception('No packages were found.');
         }
 
@@ -67,25 +65,28 @@ class Builder
                     [
                         'url' => $this->appUrl.'/bot/addon',
                         'event' => 'room_message',
-                        'pattern' => $this->buildPattern($packages),
                     ],
                 ],
             ],
         ];
 
+        $this->addWebhookPattern($descriptor);
+
         return $descriptor;
     }
 
     /**
-     * @param Package\AbstractPackage[] $packages
-     *
-     * @return string
+     * @param array $descriptor
      */
-    private function buildPattern(array $packages)
+    private function addWebhookPattern(array &$descriptor)
     {
+        if (false === $this->config->get('install.use_webhook_pattern', true)) {
+            return;
+        }
+
         $cmds = [];
 
-        foreach ($packages as $package) {
+        foreach ($this->packages as $package) {
             /* @var Package\AbstractPackage $package */
             $cmds[] = preg_quote($package->getName());
             $aliases = $package->getAliases();
@@ -95,6 +96,6 @@ class Builder
             }
         }
 
-        return sprintf('^\/(%s)', implode('|', $cmds));
+        $descriptor['capabilities']['webhook'][0]['pattern'] = sprintf('^\/(%s)', implode('|', $cmds));
     }
 }
