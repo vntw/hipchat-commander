@@ -17,21 +17,29 @@ use Venyii\HipChatCommander\Test\WebTestCase;
 
 class RequestTest extends WebTestCase
 {
-    public function testArgs()
+    /**
+     * @param string $cmd
+     * @param array $expectedArgs
+     *
+     * @dataProvider dataProviderArgs
+     */
+    public function testArgs($cmd, array $expectedArgs)
     {
-        $httpRequest = new HttpFoundation\Request([], [], [], [], [], [], json_encode($this->buildDummyData('/cmd test  test2   something ')));
-        $registryMock = $this->getMock('Venyii\HipChatCommander\Api\Client\Registry', [], [], '', false);
-        $request = new Api\Request($httpRequest, $registryMock, 'addon');
-        $this->assertSame(['test', 'test2', 'something'], $request->getArgs());
+        $httpRequest = new HttpFoundation\Request([], [], [], [], [], [], json_encode($this->buildDummyData($cmd)));
+        $request = new Api\Request($httpRequest, 'addon');
+        $this->assertSame($expectedArgs, $request->getArgs());
+    }
 
-        $httpRequest = new HttpFoundation\Request([], [], [], [], [], [], json_encode($this->buildDummyData('/cmd')));
-        $registryMock = $this->getMock('Venyii\HipChatCommander\Api\Client\Registry', [], [], '', false);
-        $request = new Api\Request($httpRequest, $registryMock, 'addon');
-        $this->assertSame([], $request->getArgs());
-
-        $httpRequest = new HttpFoundation\Request([], [], [], [], [], [], json_encode($this->buildDummyData('/cmd        ')));
-        $registryMock = $this->getMock('Venyii\HipChatCommander\Api\Client\Registry', [], [], '', false);
-        $request = new Api\Request($httpRequest, $registryMock, 'addon');
-        $this->assertSame([], $request->getArgs());
+    /**
+     * @return array
+     */
+    public static function dataProviderArgs()
+    {
+        return [
+            ['/cmd test  test2   something ', ['test', 'test2', 'something']],
+            ['/cmd test-test test_test', ['test-test', 'test_test']],
+            ['/cmd', []],
+            ['/cmd        ', []],
+        ];
     }
 }
