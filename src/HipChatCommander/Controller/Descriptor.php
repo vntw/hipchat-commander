@@ -46,7 +46,7 @@ class Descriptor implements ControllerProviderInterface
         $builder = new Builder(
             $request->getSchemeAndHttpHost().$request->getBaseUrl(),
             $app['hc.config'],
-            $app['hc.package_locator']->getPackages()
+            $app['hc.package_loader']->getPackages()
         );
 
         return new JsonResponse($builder->build());

@@ -94,7 +94,7 @@ class Bot implements ControllerProviderInterface
         }
 
         /* @var \Venyii\HipChatCommander\Package\AbstractPackage $package */
-        $package = $app['hc.package_locator']->getPackage($apiRequest->getPackage());
+        $package = $app['hc.package_loader']->getPackage($apiRequest->getPackage());
 
         if ($package === null) {
             $app['logger']->warning('Unknown package: '.$apiRequest->getPackage());

@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 class Config
 {
     private $options;
-    private $packageClasses;
+    private $enabledPackages;
     private $rooms;
     private $filesystem;
 
@@ -32,16 +32,16 @@ class Config
 
         $this->validate();
 
-        $this->parseEnabledPackageClasses();
+        $this->parseEnabledPackages();
         $this->parseRooms();
     }
 
     /**
      * @return string[]
      */
-    public function getPackageClasses()
+    public function getEnabledPackages()
     {
-        return $this->packageClasses;
+        return $this->enabledPackages;
     }
 
     /**
@@ -96,16 +96,16 @@ class Config
         Assertion::isArray($this->options['rooms']);
     }
 
-    private function parseEnabledPackageClasses()
+    private function parseEnabledPackages()
     {
-        $this->packageClasses = [];
+        $this->enabledPackages = [];
 
-        foreach ($this->options['packages'] as $packageNs) {
-            $name = $packageNs.'\\Package';
-
-            if (!in_array($name, $this->packageClasses)) {
-                $this->packageClasses[] = $name;
+        foreach ($this->options['packages'] as $package) {
+            if (in_array($package, $this->enabledPackages, true)) {
+                throw new \InvalidArgumentException(sprintf('Looks like the package "%s" is duplicated in your enabled packages config.', $package));
             }
+
+            $this->enabledPackages[] = $package;
         }
     }
 

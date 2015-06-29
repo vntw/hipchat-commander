@@ -54,8 +54,8 @@ $app['hc.method_builder'] = $app->share(function () {
     return new Package\MethodGenerator();
 });
 
-$app['hc.package_locator'] = $app->share(function () use ($app) {
-    return new Package\Locator($app['hc.config']->getPackageClasses());
+$app['hc.package_loader'] = $app->share(function () use ($app) {
+    return new Package\Loader($app['hc.config']->getEnabledPackages());
 });
 
 $app['hc.cache_factory'] = $app->protect(function ($namespace) use ($app) {

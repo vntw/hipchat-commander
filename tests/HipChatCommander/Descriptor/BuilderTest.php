@@ -38,7 +38,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock()->getPackages());
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLoaderMock()->getPackages());
         $desc = $builder->build();
 
         $this->assertSame($builder::DEFAULT_BOT_NAME, $desc['name']);
@@ -78,7 +78,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock()->getPackages());
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLoaderMock()->getPackages());
         $desc = $builder->build();
 
         $this->assertSame('ACME Bot', $desc['name']);
@@ -97,7 +97,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testNoPackagesThrowsException()
     {
         $configMock = $this->getMock('\Venyii\HipChatCommander\Config\Config', [], [], '', false);
-        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLocatorMock(true)->getPackages());
+        $builder = new Builder('https://commander.com', $configMock, $this->createPackageLoaderMock(true)->getPackages());
         $builder->build();
     }
 
@@ -106,7 +106,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createPackageLocatorMock($empty = false)
+    private function createPackageLoaderMock($empty = false)
     {
         if ($empty) {
             $packages = [];
@@ -118,13 +118,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        $locatorMock = $this->getMock('\Venyii\HipChatCommander\Package\Locator', [], [], '', false);
-        $locatorMock
+        $packageLoaderMock = $this->getMock('\Venyii\HipChatCommander\Package\Loader', [], [], '', false);
+        $packageLoaderMock
             ->expects($this->once())
             ->method('getPackages')
             ->will($this->returnValue($packages))
         ;
 
-        return $locatorMock;
+        return $packageLoaderMock;
     }
 }

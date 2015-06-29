@@ -148,12 +148,17 @@ abstract class WebTestCase extends BaseWebTestCase
 packages:
   - Venyii\HipChatCommander\Package\HelloWorld
   - Venyii\HipChatCommander\Test\Package\Dummy1
-  - {$this->getPackageClass()}
+YML;
+            }
 
+            if ($this->getPackageClass() !== 'Venyii\HipChatCommander\Package\HelloWorld') {
+                $yml .= <<<YML
+  - {$this->getPackageClass()}
 YML;
             }
 
             $yml .= <<<YML
+
 rooms:
   - id: 7331
     packages:

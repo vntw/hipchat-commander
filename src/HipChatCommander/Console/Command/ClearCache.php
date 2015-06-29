@@ -40,7 +40,7 @@ class ClearCache extends Command
         if ($namespace = $input->getOption('namespace')) {
             $packageName = $input->getOption('package');
 
-            if (null !== $packageName && null === $app['hc.package_locator']->getPackage($packageName)) {
+            if (null !== $packageName && null === $app['hc.package_loader']->getPackage($packageName)) {
                 $output->writeln(sprintf('<error>Unknown package "%s"</error>', $packageName));
 
                 return;

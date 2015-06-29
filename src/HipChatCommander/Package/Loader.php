@@ -11,12 +11,12 @@
 
 namespace Venyii\HipChatCommander\Package;
 
-class Locator
+class Loader
 {
     /**
      * @var string[]
      */
-    private $packageClasses;
+    private $packageNamespaces;
 
     /**
      * @var AbstractPackage[]
@@ -24,11 +24,11 @@ class Locator
     private $packages;
 
     /**
-     * @param array $packageClasses
+     * @param array $packageNamespaces
      */
-    public function __construct(array $packageClasses)
+    public function __construct(array $packageNamespaces)
     {
-        $this->packageClasses = $packageClasses;
+        $this->packageNamespaces = $packageNamespaces;
 
         $this->loadPackages();
     }
@@ -61,15 +61,17 @@ class Locator
     {
         $this->packages = [];
 
-        foreach ($this->packageClasses as $packageClass) {
+        foreach ($this->packageNamespaces as $packageNamespace) {
+            $packageClass = $packageNamespace.'\\Package';
+
             if (!class_exists($packageClass)) {
-                throw new \InvalidArgumentException('Package not found: '.$packageClass);
+                throw new \InvalidArgumentException(sprintf('The package "%s" could not be found', $packageClass));
             }
 
             $package = new $packageClass();
 
             if (!$package instanceof AbstractPackage) {
-                throw new \InvalidArgumentException('The package does not implement the HandlerInterface');
+                throw new \InvalidArgumentException(sprintf('The package "%s" must extend the %s class', $packageClass, AbstractPackage::class));
             }
 
             $package->configure();
