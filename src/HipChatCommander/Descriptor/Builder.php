@@ -23,9 +23,9 @@ class Builder
     private $packages;
 
     /**
-     * @param string          $appUrl
-     * @param Config          $config
-     * @param array           $packages
+     * @param string $appUrl
+     * @param Config $config
+     * @param array  $packages
      */
     public function __construct($appUrl, Config $config, array $packages)
     {

@@ -41,4 +41,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         new Loader(['SearchMe\IfYou\Can']);
     }
+
+    public function testPackageMissingExtendsThrowsException()
+    {
+        $this->setExpectedException('\InvalidArgumentException', 'The package "\Venyii\HipChatCommander\Test\Package\MissingExtends\Package" must extend the Venyii\HipChatCommander\Package\AbstractPackage class');
+
+        new Loader(['\Venyii\HipChatCommander\Test\Package\MissingExtends']);
+    }
 }
