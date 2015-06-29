@@ -1274,12 +1274,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "cff532b741e0b4e4812d93ff2ad64952440aaaea"
+                "reference": "52fe0ebd802c554af0e8f09272123845c66140a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/cff532b741e0b4e4812d93ff2ad64952440aaaea",
-                "reference": "cff532b741e0b4e4812d93ff2ad64952440aaaea",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/52fe0ebd802c554af0e8f09272123845c66140a3",
+                "reference": "52fe0ebd802c554af0e8f09272123845c66140a3",
                 "shasum": ""
             },
             "require": {
@@ -1325,7 +1325,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-06-17 20:27:30"
+            "time": "2015-06-28 16:37:44"
         },
         {
             "name": "mikey179/vfsStream",
