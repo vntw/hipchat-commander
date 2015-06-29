@@ -80,6 +80,10 @@ $app['hc.api_client'] = $app->protect(function ($clientId, $requestType = null) 
     return new Api\Client($clientId, $app['hc.config'], $app['hc.api_registry'], new GuzzleClient(), $app['logger'], $requestType);
 });
 
+$app['hc.api_request_validator'] = $app->share(function () use ($app) {
+    return new Api\Request\Validator($app['hc.api_registry']);
+});
+
 $app->register(new MonologServiceProvider(), array(
     'monolog.name' => 'HipChatCommander',
     'monolog.logfile' => $app['hc.root_dir'].'/logs/'.($app['debug'] ? 'dev' : 'prod').'.log',

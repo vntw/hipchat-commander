@@ -22,10 +22,17 @@ use Venyii\HipChatCommander\Api;
 class Bot implements ControllerProviderInterface
 {
     /**
+     * @var Application
+     */
+    private $app;
+
+    /**
      * {@inheritdoc}
      */
     public function connect(Application $app)
     {
+        $this->app = $app;
+
         /* @var $router ControllerCollection */
         $router = $app['controllers_factory'];
 
@@ -37,67 +44,56 @@ class Bot implements ControllerProviderInterface
 
     /**
      * @param Request     $request
-     * @param Application $app
      *
      * @return Response
      *
      * @throws \Exception
      */
-    public function addonBotAction(Request $request, Application $app)
+    public function addonBotAction(Request $request)
     {
-        return $this->botAction(Api\Request::REQ_TYPE_ADDON, $request, $app);
+        return $this->botAction(Api\Request::REQ_TYPE_ADDON, $request);
     }
 
     /**
      * @param Request     $request
-     * @param Application $app
      *
      * @return Response
      *
      * @throws \Exception
      */
-    public function simpleBotAction(Request $request, Application $app)
+    public function simpleBotAction(Request $request)
     {
-        return $this->botAction(Api\Request::REQ_TYPE_SIMPLE, $request, $app);
+        return $this->botAction(Api\Request::REQ_TYPE_SIMPLE, $request);
     }
 
     /**
      * @param string      $type
      * @param Request     $request
-     * @param Application $app
      *
      * @return Response
      *
      * @throws \Exception
      */
-    private function botAction($type, Request $request, Application $app)
+    private function botAction($type, Request $request)
     {
-        $apiRequest = new Api\Request($request, $app['hc.api_registry'], $type);
+        $apiRequest = new Api\Request($request, $type);
 
-        if ($type === Api\Request::REQ_TYPE_ADDON) {
-            try {
-                $apiRequest->validate();
-            } catch (\Exception $e) {
-                $app['logger']->error('Failed validating the request: '.$e->getMessage());
-
-                throw $e;
-            }
-        }
+        $this->validateApiRequest($type, $apiRequest);
 
         /* @var \Venyii\HipChatCommander\Config\Room $room */
-        $room = $app['hc.config']->getRoomById($apiRequest->getRoom()->getId());
+        $room = $this->app['hc.config']->getRoomById($apiRequest->getRoom()->getId());
 
         if ($room === null) {
-            $app['logger']->warning(sprintf('Unsupported room: %s (%d)', $apiRequest->getRoom()->getName(), $apiRequest->getRoom()->getId()));
+            $this->app['logger']->warning(sprintf('Unsupported room: %s (%d)', $apiRequest->getRoom()->getName(), $apiRequest->getRoom()->getId()));
 
             return new Response();
         }
 
         /* @var \Venyii\HipChatCommander\Package\AbstractPackage $package */
-        $package = $app['hc.package_loader']->getPackage($apiRequest->getPackage());
+        $package = $this->app['hc.package_loader']->getPackage($apiRequest->getPackage());
 
         if ($package === null) {
-            $app['logger']->warning('Unknown package: '.$apiRequest->getPackage());
+            $this->app['logger']->warning('Unknown package: '.$apiRequest->getPackage());
 
             return new Response();
         }
@@ -105,7 +101,7 @@ class Bot implements ControllerProviderInterface
         $roomPackage = $room->getPackageByName($package->getName());
 
         if ($roomPackage === null) {
-            $app['logger']->warning(sprintf('Unsupported package "%s" for room "%d"', $apiRequest->getPackage(), $room->getId()));
+            $this->app['logger']->warning(sprintf('Unsupported package "%s" for room "%d"', $apiRequest->getPackage(), $room->getId()));
 
             return new Response();
         }
@@ -114,7 +110,7 @@ class Bot implements ControllerProviderInterface
         $command = $package->getCommandByArgument($argument);
 
         if ($command === null) {
-            $app['logger']->warning('Unsupported command: '.$argument);
+            $this->app['logger']->warning('Unsupported command: '.$argument);
 
             return $this->createJsonResponse(Api\Response::createError('Unsupported command!'));
         }
@@ -127,10 +123,10 @@ class Bot implements ControllerProviderInterface
             return $this->createJsonResponse(Api\Response::createError('You are not permitted to perform this action!'));
         }
 
-        $methodName = $app['hc.method_builder']->generate($command);
+        $methodName = $this->app['hc.method_builder']->generate($command);
 
         if (!method_exists($package, $methodName)) {
-            $app['logger']->error(sprintf(
+            $this->app['logger']->error(sprintf(
                 'Tried to call non existing method %s on class %s (Package: %s)',
                 $methodName, get_class($package), $package->getName()
             ));
@@ -138,15 +134,15 @@ class Bot implements ControllerProviderInterface
             return $this->createJsonResponse(Api\Response::createError('Unsupported command!'));
         }
 
-        $pkgCache = $app['hc.pkg_cache']($roomPackage->getCacheNs() ?: $apiRequest->getClientId(), $package->getName());
-        $apiClient = $app['hc.api_client']($apiRequest->getClientId(), $apiRequest->getType());
+        $pkgCache = $this->app['hc.pkg_cache']($roomPackage->getCacheNs() ?: $apiRequest->getClientId(), $package->getName());
+        $apiClient = $this->app['hc.api_client']($apiRequest->getClientId(), $apiRequest->getType());
 
         /** @var Api\Response $response */
         $response = $package
             ->setRequest($apiRequest)
             ->setCache($pkgCache)
             ->setApiClient($apiClient)
-            ->setLogger($app['logger'])
+            ->setLogger($this->app['logger'])
             ->setOptions($roomPackage->getOptions())
             ->{$methodName}();
 
@@ -155,6 +151,25 @@ class Bot implements ControllerProviderInterface
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    /**
+     * @param string $type
+     * @param Api\Request $apiRequest
+     *
+     * @throws \Exception
+     */
+    private function validateApiRequest($type, Api\Request $apiRequest)
+    {
+        if ($type === Api\Request::REQ_TYPE_ADDON) {
+            try {
+                $this->app['hc.api_request_validator']->validate($apiRequest);
+            } catch (\Exception $e) {
+                $this->app['logger']->error('Failed validating the request: '.$e->getMessage());
+
+                throw $e;
+            }
+        }
     }
 
     /**

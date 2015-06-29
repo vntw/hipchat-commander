@@ -22,7 +22,6 @@ class Request
     const REQ_TYPE_ADDON = 'addon';
 
     private $httpRequest;
-    private $registry;
     private $type;
     private $data;
     private $clientId;
@@ -33,15 +32,13 @@ class Request
 
     /**
      * @param HttpRequest     $httpRequest
-     * @param Client\Registry $registry
      * @param string          $type
      *
      * @throws \Exception
      */
-    public function __construct(HttpRequest $httpRequest, Client\Registry $registry, $type)
+    public function __construct(HttpRequest $httpRequest, $type)
     {
         $this->httpRequest = $httpRequest;
-        $this->registry = $registry;
 
         $this->setType($type);
         $this->parseHttpRequest();
@@ -105,16 +102,6 @@ class Request
     public function getRoom()
     {
         return $this->room;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function validate()
-    {
-        if (!$this->registry->isInstalled($this->clientId)) {
-            throw new \Exception('Unknown client: '.$this->clientId);
-        }
     }
 
     /**
