@@ -287,7 +287,7 @@ class Package extends AbstractPackage
 
         $userVotes = $this->getVotes();
 
-        if (! isset($userVotes[$user])) {
+        if (!isset($userVotes[$user])) {
             return Response::createError(sprintf('Could not find any vote for user `%s`', $user));
         }
 

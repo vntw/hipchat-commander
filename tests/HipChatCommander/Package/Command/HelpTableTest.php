@@ -13,13 +13,14 @@ namespace Venyii\HipChatCommander\Test\Package\Command;
 
 use Venyii\HipChatCommander\Package\Command;
 use Venyii\HipChatCommander\Package\Command\HelpTable;
-use Venyii\HipChatCommander\Test\Package\Dummy1\Package;
+use Venyii\HipChatCommander\Test\Package\Dummy1;
+use Venyii\HipChatCommander\Test\Package\NoCommands;
 
 class HelpTableTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuild()
     {
-        $pkg = new Package();
+        $pkg = new Dummy1\Package();
         $pkg->configure();
 
         $helpTable = new HelpTable($pkg);
@@ -39,5 +40,16 @@ class HelpTableTest extends \PHPUnit_Framework_TestCase
 TABLE;
 
         $this->assertSame($expected, $output);
+    }
+
+    public function testBuildThrowsExceptionIfPackageHasNoCommands()
+    {
+        $this->setExpectedException('\RuntimeException', 'Creating a help table without commands is not possible.');
+
+        $pkg = new NoCommands\Package();
+        $pkg->configure();
+
+        $helpTable = new HelpTable($pkg);
+        $helpTable->build();
     }
 }

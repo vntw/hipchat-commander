@@ -1,10 +1,11 @@
 <?php
 
 $finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(__DIR__)
-    ->exclude([
-        __DIR__.'/cache',
-        __DIR__.'/vendor'
+    ->in([
+        __DIR__.'/src',
+        __DIR__.'/pkg',
+        __DIR__.'/tests',
+        __DIR__.'/web',
     ])
 ;
 

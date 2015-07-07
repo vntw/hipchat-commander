@@ -11,7 +11,6 @@
 
 namespace Venyii\HipChatCommander\Package\Command;
 
-use Symfony\Component\Console\Helper\Table;
 use Venyii\HipChatCommander\Package\AbstractPackage;
 use Venyii\HipChatCommander\Package\Command;
 
@@ -41,7 +40,7 @@ class HelpTable
     public function build()
     {
         if (empty($this->package->getCommands())) {
-            return '';
+            throw new \RuntimeException('Creating a help table without commands is not possible.');
         }
 
         $table = <<<HTML
