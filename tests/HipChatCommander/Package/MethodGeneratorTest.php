@@ -40,8 +40,8 @@ class MethodGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [new Command('create'), 'createCmd'],
-            [new Command('always', [], false, 'day'), 'dayCmd'],
-            [new Command('always', ['better', 'something'], true, 'day'), 'dayCmd'],
+            [new Command('always', null, [], false, 'day'), 'dayCmd'],
+            [new Command('always', null, ['better', 'something'], true, 'day'), 'dayCmd'],
         ];
     }
 }

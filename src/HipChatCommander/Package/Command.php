@@ -14,23 +14,26 @@ namespace Venyii\HipChatCommander\Package;
 class Command
 {
     private $name;
+    private $description;
     private $aliases;
     private $default;
     private $method;
 
     /**
      * @param string      $name
+     * @param string      $description
      * @param array       $aliases
      * @param bool        $default
      * @param string|null $method
      */
-    public function __construct($name, $aliases = [], $default = false, $method = null)
+    public function __construct($name, $description = null, $aliases = [], $default = false, $method = null)
     {
         if (empty($name) || !is_array($aliases)) {
             throw new \InvalidArgumentException('Invalid command options given.');
         }
 
         $this->name = $name;
+        $this->description = $description;
         $this->aliases = $aliases;
         $this->default = (bool) $default;
         $this->method = $method;
@@ -42,6 +45,14 @@ class Command
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

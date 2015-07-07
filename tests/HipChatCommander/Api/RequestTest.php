@@ -19,7 +19,7 @@ class RequestTest extends WebTestCase
 {
     /**
      * @param string $cmd
-     * @param array $expectedArgs
+     * @param array  $expectedArgs
      *
      * @dataProvider dataProviderArgs
      */

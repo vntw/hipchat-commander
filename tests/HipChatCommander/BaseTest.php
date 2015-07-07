@@ -53,6 +53,6 @@ YML;
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
         $this->assertEquals('ACME Maid', $jsonResponse['name']);
         $this->assertEquals('de.cersei.hccommander', $jsonResponse['key']);
-        $this->assertEquals('^\/(helloWorld|dummy1)', $jsonResponse['capabilities']['webhook'][0]['pattern']);
+        $this->assertEquals('^\/(helloWorld|dummy1|dm1|dunny1)', $jsonResponse['capabilities']['webhook'][0]['pattern']);
     }
 }

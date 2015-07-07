@@ -14,6 +14,7 @@ namespace Venyii\HipChatCommander\Package;
 use Doctrine\Common\Cache\Cache;
 use Psr\Log\LoggerInterface;
 use Venyii\HipChatCommander\Api;
+use Venyii\HipChatCommander\Package\Command\HelpTable;
 
 abstract class AbstractPackage
 {
@@ -26,6 +27,11 @@ abstract class AbstractPackage
      * @var array
      */
     private $aliases = [];
+
+    /**
+     * @var string
+     */
+    private $description;
 
     /**
      * @var Command[]
@@ -100,6 +106,34 @@ abstract class AbstractPackage
     public function getAliases()
     {
         return $this->aliases;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return $this
+     */
+    protected function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return Command[]
+     */
+    public function getCommands()
+    {
+        return $this->commands;
     }
 
     /**
@@ -204,22 +238,39 @@ abstract class AbstractPackage
     }
 
     /**
+     * A generic help command.
+     * 
+     * @return Api\Response
+     */
+    public function helpCmd()
+    {
+        return Api\Response::create(
+            (new HelpTable($this))->build(),
+            Api\Response::FORMAT_HTML,
+            Api\Response::COLOR_GRAY
+        );
+    }
+
+    /**
      * @param Api\Response $response
      */
     public function sendRoomMsg(Api\Response $response)
     {
-        $this->client->send('room/'.$this->request->getRoom()->getId().'/notification', $response->toArray());
+        $uri = sprintf('room/%d/notification', $this->request->getRoom()->getId());
+
+        $this->client->send($uri, $response->toArray());
     }
 
     /**
      * @param string      $name
+     * @param string      $description
      * @param array       $aliases
      * @param bool        $default
      * @param string|null $method
      *
      * @return $this
      */
-    protected function addCommand($name, array $aliases = [], $default = false, $method = null)
+    protected function addCommand($name, $description = null, array $aliases = [], $default = false, $method = null)
     {
         if (isset($this->commands[$name])) {
             throw new \LogicException(sprintf('A command with the name "%s" already exists.', $name));
@@ -232,7 +283,7 @@ abstract class AbstractPackage
         }
 
         $this->defaultCommandAdded = $default;
-        $this->commands[$name] = new Command($name, $aliases, $default, $method);
+        $this->commands[$name] = new Command($name, $description, $aliases, $default, $method);
 
         return $this;
     }

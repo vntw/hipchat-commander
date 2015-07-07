@@ -43,7 +43,7 @@ class Bot implements ControllerProviderInterface
     }
 
     /**
-     * @param Request     $request
+     * @param Request $request
      *
      * @return Response
      *
@@ -55,7 +55,7 @@ class Bot implements ControllerProviderInterface
     }
 
     /**
-     * @param Request     $request
+     * @param Request $request
      *
      * @return Response
      *
@@ -67,8 +67,8 @@ class Bot implements ControllerProviderInterface
     }
 
     /**
-     * @param string      $type
-     * @param Request     $request
+     * @param string  $type
+     * @param Request $request
      *
      * @return Response
      *
@@ -154,7 +154,7 @@ class Bot implements ControllerProviderInterface
     }
 
     /**
-     * @param string $type
+     * @param string      $type
      * @param Api\Request $apiRequest
      *
      * @throws \Exception

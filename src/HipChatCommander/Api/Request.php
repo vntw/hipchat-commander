@@ -31,8 +31,8 @@ class Request
     private $room;
 
     /**
-     * @param HttpRequest     $httpRequest
-     * @param string          $type
+     * @param HttpRequest $httpRequest
+     * @param string      $type
      *
      * @throws \Exception
      */

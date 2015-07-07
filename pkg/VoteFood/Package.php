@@ -27,26 +27,20 @@ class Package extends AbstractPackage
     {
         $this
             ->setName('voteFood')
+            ->setDescription('Vote for your favourite food store and decide where to eat with your team.')
             ->setAliases(['essen'])
-            ->addCommand('status', [], true)
-            ->addCommand('init')
-            ->addCommand('clear')
-            ->addCommand('stores')
-            ->addCommand('vote')
-            ->addCommand('decide')
-            ->addCommand('abstain')
-            ->addCommand('mkstore')
-            ->addCommand('rmstore')
-            ->addCommand('go', ['notify'])
+            ->addCommand('help')
+            ->addCommand('status', 'Shows a summary of all votes.', [], true)
+            ->addCommand('init', 'Initiates a new vote. This won´t delete your custom stores.')
+            ->addCommand('clear', 'Initiates a new vote and removes all custom stores.')
+            ->addCommand('stores', 'Displays all available stores.')
+            ->addCommand('vote', 'Vote for one or more stores. Calling this multiple times will overwrite your previous vote.')
+            ->addCommand('decide', 'Randomly decide where to eat.')
+            ->addCommand('abstain', 'Abstain from the current vote.')
+            ->addCommand('mkstore', 'Add a custom store. Usage: /voteFood mkstore <store_short> <Store>')
+            ->addCommand('rmstore', 'Remove a custom store. Usage: /voteFood rmstore <store_short>')
+            ->addCommand('go', 'Notify all voters that it´s time to go. The store is optional.', ['notify'])
         ;
-    }
-
-    /**
-     * @return Response
-     */
-    public function helpCmd()
-    {
-        return Response::create('(doge) Usage: /essen init, /essen vote <store1> <store2>, /essen status');
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace Venyii\HipChatCommander\Test\Api;
 
-use Symfony\Component\HttpFoundation;
 use Venyii\HipChatCommander\Api;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase

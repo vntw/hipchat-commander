@@ -23,7 +23,11 @@ class Package extends AbstractPackage
     {
         $this
             ->setName('dummy1')
-            ->addCommand('do', [], true)
+            ->setAliases(['dm1', 'dunny1'])
+            ->setDescription('Dummy1 package description')
+            ->addCommand('do', 'This is the do command', [], true)
+            ->addCommand('make', 'This is some command description', ['build', 'create'])
+            ->addCommand('produce')
         ;
     }
 

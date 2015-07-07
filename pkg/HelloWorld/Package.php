@@ -23,7 +23,9 @@ class Package extends AbstractPackage
     {
         $this
             ->setName('helloWorld')
-            ->addCommand('say', [], true)
+            ->setDescription('Greet the world!')
+            ->addCommand('help')
+            ->addCommand('say', 'Greet the world!', [], true)
         ;
     }
 
