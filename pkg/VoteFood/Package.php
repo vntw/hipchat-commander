@@ -40,6 +40,7 @@ class Package extends AbstractPackage
             ->addCommand('mkstore', 'Add a custom store. Usage: /voteFood mkstore <store_short> <Store>')
             ->addCommand('rmstore', 'Remove a custom store. Usage: /voteFood rmstore <store_short>')
             ->addCommand('go', 'Notify all voters that it´s time to go. The store is optional.', ['notify'])
+            ->addCommand('ack', 'Accept another users vote. Usage: /voteFood ack <user>')
         ;
     }
 
@@ -270,6 +271,28 @@ class Package extends AbstractPackage
         }
 
         $userVotes[$userMention] = $votes;
+
+        $this->getCache()->save(self::CACHE_KEY_VOTES, $userVotes);
+        $this->removeAbstain($userMention);
+
+        return $this->statusCmd();
+    }
+
+    /**
+     * @return Response
+     */
+    public function ackCmd()
+    {
+        $user = $this->getRequest()->getArg(1);
+
+        $userVotes = $this->getVotes();
+
+        if (! isset($userVotes[$user])) {
+            return Response::createError(sprintf('Could not find any vote for user `%s`', $user));
+        }
+
+        $userMention = $this->getRequest()->getUser()->getMentionName();
+        $userVotes[$userMention] = $userVotes[$user];
 
         $this->getCache()->save(self::CACHE_KEY_VOTES, $userVotes);
         $this->removeAbstain($userMention);
