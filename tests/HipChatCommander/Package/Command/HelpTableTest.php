@@ -26,7 +26,7 @@ class HelpTableTest extends \PHPUnit_Framework_TestCase
         $output = $helpTable->build();
 
         $expected = <<<TABLE
-dummy1 - Dummy1 package description
+<strong>dummy1</strong> - Dummy1 package description
 <br><br>
 <table>
     <tr>
@@ -34,7 +34,7 @@ dummy1 - Dummy1 package description
         <td>Aliases</td>
         <td>Description</td>
     </tr>
-    <tr><td>do [default]</td><td>-</td><td>This is the do command</td></tr><tr><td>make</td><td>build, create</td><td>This is some command description</td></tr><tr><td>produce</td><td>-</td><td>-</td></tr>
+    <tr><td>do [default]&nbsp;</td><td>-&nbsp;</td><td>This is the do command&nbsp;</td></tr><tr><td>make&nbsp;</td><td>build, create&nbsp;</td><td>This is some command description&nbsp;</td></tr><tr><td>produce&nbsp;</td><td>-&nbsp;</td><td>-&nbsp;</td></tr>
 </table>
 TABLE;
 

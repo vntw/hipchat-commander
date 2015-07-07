@@ -45,7 +45,7 @@ class HelpTable
         }
 
         $table = <<<HTML
-%s
+<strong>%s</strong>%s
 <br><br>
 <table>
     <tr>
@@ -58,16 +58,28 @@ class HelpTable
 HTML;
 
         $name = $this->package->getName();
+        $description = null;
+
         if ($this->package->getDescription()) {
-            $name .= ' - '.htmlspecialchars($this->package->getDescription());
+            $description .= ' - '.htmlspecialchars($this->package->getDescription());
         }
 
+        $commands = $this->buildCommandRows();
+
+        return sprintf($table, $name, $description, $commands);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildCommandRows()
+    {
         $commands = '';
         foreach ($this->package->getCommands() as $command) {
             if (in_array($command->getName(), $this->ignoredCommands, true)) {
                 continue;
             }
-            
+
             $aliases = '-';
 
             if (!empty($command->getAliases())) {
@@ -75,7 +87,7 @@ HTML;
             }
 
             $commands .= sprintf(
-                '<tr><td>%s%s</td><td>%s</td><td>%s</td></tr>',
+                '<tr><td>%s%s&nbsp;</td><td>%s&nbsp;</td><td>%s&nbsp;</td></tr>',
                 $command->getName(),
                 $command->isDefault() ? ' [default]' : null,
                 $aliases,
@@ -83,6 +95,6 @@ HTML;
             );
         }
 
-        return sprintf($table, $name, $commands);
+        return $commands;
     }
 }
