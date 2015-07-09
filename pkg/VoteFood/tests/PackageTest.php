@@ -491,12 +491,6 @@ YML;
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
         $responseJson = json_decode($response->getContent(), true);
-        $this->assertSame('(successful) Successfully saved!', $responseJson['message']);
-
-        $response = $this->request($this->buildDummyData('/essen status'), '/bot/simple');
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
-        $responseJson = json_decode($response->getContent(), true);
         $this->assertSame('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>andifined&nbsp;&nbsp;</td><td>rutegar&nbsp;&nbsp;</td><td>nother&nbsp;&nbsp;</td></tr><tr><td>[0]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[2]</td><td>McDonalds&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td><td>&nbsp;-</td></tr><tr><td>[2]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td colspan="5">&nbsp;</td></tr><tr><td colspan="5">Abstains: not_hungry</td></tr></table>', $responseJson['message']);
 
         $this->request($this->buildDummyData('/essen vote doener cw mcd', 89744, 'not_hungry', 'not_hungry'), '/bot/simple');
