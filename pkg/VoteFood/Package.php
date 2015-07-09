@@ -218,7 +218,7 @@ class Package extends AbstractPackage
         unset($votes[$userMention]);
         $this->getCache()->save(self::CACHE_KEY_VOTES, $votes);
 
-        return Response::createSuccess('Successfully saved!');
+        return $this->statusCmd();
     }
 
     /**
