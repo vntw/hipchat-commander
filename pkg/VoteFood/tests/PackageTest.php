@@ -435,7 +435,7 @@ YML;
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
         $responseJson = json_decode($response->getContent(), true);
-        $this->assertSame('(successful) Successfully cleared all votes and stores!', $responseJson['message']);
+        $this->assertSame('(successful) Successfully cleared all votes and custom stores!', $responseJson['message']);
 
         $response = $this->request($this->buildDummyData('/essen status'));
         $this->assertEquals(200, $response->getStatusCode());

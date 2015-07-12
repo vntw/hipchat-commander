@@ -66,7 +66,7 @@ class Package extends AbstractPackage
 
         $this->populateDefaultStores();
 
-        return Response::createSuccess('Successfully cleared all votes and stores!');
+        return Response::createSuccess('Successfully cleared all votes and custom stores!');
     }
 
     /**
@@ -216,7 +216,8 @@ class Package extends AbstractPackage
 
         $votes = $this->getVotes();
         unset($votes[$userMention]);
-        $this->getCache()->save(self::CACHE_KEY_VOTES, $votes);
+
+        $this->saveVotes($votes);
 
         return $this->statusCmd();
     }
@@ -245,8 +246,7 @@ class Package extends AbstractPackage
             if (isset($userVotes[$userMention])) {
                 unset($userVotes[$userMention]);
 
-                $this->getCache()->save(self::CACHE_KEY_VOTES, $userVotes);
-
+                $this->saveVotes($userVotes);
                 $this->sendRoomMsg(Response::createSuccess('Successfully removed your vote!'));
             }
 
@@ -272,7 +272,7 @@ class Package extends AbstractPackage
 
         $userVotes[$userMention] = $votes;
 
-        $this->getCache()->save(self::CACHE_KEY_VOTES, $userVotes);
+        $this->saveVotes($userVotes);
         $this->removeAbstain($userMention);
 
         return $this->statusCmd();
@@ -294,7 +294,7 @@ class Package extends AbstractPackage
         $userMention = $this->getRequest()->getUser()->getMentionName();
         $userVotes[$userMention] = $userVotes[$user];
 
-        $this->getCache()->save(self::CACHE_KEY_VOTES, $userVotes);
+        $this->saveVotes($userVotes);
         $this->removeAbstain($userMention);
 
         return $this->statusCmd();
@@ -387,6 +387,14 @@ class Package extends AbstractPackage
         $votes = $this->getCache()->fetch(self::CACHE_KEY_VOTES);
 
         return $votes ? $votes : [];
+    }
+
+    /**
+     * @param array $votes
+     */
+    private function saveVotes(array $votes)
+    {
+        $this->getCache()->save(self::CACHE_KEY_VOTES, $votes);
     }
 
     /**
