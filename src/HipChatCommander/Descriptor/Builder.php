@@ -63,7 +63,7 @@ class Builder
                 ],
                 'webhook' => [
                     [
-                        'url' => $this->appUrl.'/bot/addon',
+                        'url' => $this->appUrl.'/bot',
                         'event' => 'room_message',
                     ],
                 ],

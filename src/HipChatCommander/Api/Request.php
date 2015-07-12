@@ -17,9 +17,6 @@ use Venyii\HipChatCommander\Api\Request\User;
 
 class Request
 {
-    const REQ_TYPE_SIMPLE = 'simple';
-    const REQ_TYPE_ADDON = 'addon';
-
     private $httpRequest;
     private $data;
     private $clientId;
