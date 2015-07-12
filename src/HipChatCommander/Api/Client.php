@@ -69,7 +69,7 @@ class Client
                     // expired auth token? try once again
                     $this->logger->debug('Got 401 - Trying to renew auth token');
                     $this->renewAuthToken();
-                    $response = $this->doSend($uri, $data);
+                    $this->doSend($uri, $data);
                     break;
                 case 429:
                     $this->logger->warning('Got 429 - Rate limited', [
