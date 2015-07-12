@@ -13,7 +13,7 @@ namespace Venyii\HipChatCommander\Test\Api;
 
 use Symfony\Component\HttpFoundation;
 use Venyii\HipChatCommander\Api;
-use Venyii\HipChatCommander\Test\WebTestCase;
+use Venyii\HipChatCommander\WebTestCase;
 
 class RequestTest extends WebTestCase
 {

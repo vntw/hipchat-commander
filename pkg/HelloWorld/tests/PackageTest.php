@@ -12,7 +12,7 @@
 namespace Venyii\HipChatCommander\Test\Package\HelloWorld;
 
 use Venyii\HipChatCommander\Api\Response;
-use Venyii\HipChatCommander\Test\WebTestCase;
+use Venyii\HipChatCommander\WebTestCase;
 
 class PackageTest extends WebTestCase
 {
@@ -40,7 +40,7 @@ YML;
 
         $this->createTestConfig($yml);
 
-        $response = $this->request($this->buildDummyData('/helloWorld'), '/bot/simple');
+        $response = $this->request($this->buildDummyData('/helloWorld'));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));

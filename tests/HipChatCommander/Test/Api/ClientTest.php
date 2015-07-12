@@ -15,7 +15,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
 use Venyii\HipChatCommander\Api;
-use Venyii\HipChatCommander\Test\WebTestCase;
+use Venyii\HipChatCommander\WebTestCase;
 
 class ClientTest extends WebTestCase
 {
@@ -37,7 +37,7 @@ class ClientTest extends WebTestCase
             ->method('send')
             ->will($this->throwException($requestException));
 
-        $client = new Api\Client('__oauthId__', $this->app['hc.config'], $this->app['hc.api_registry'], $httpClientMock, $this->app['logger'], Api\Request::REQ_TYPE_ADDON);
+        $client = new Api\Client('__oauthId__', $this->app['hc.config'], $this->app['hc.api_registry'], $httpClientMock, $this->app['logger']);
 
         $this->setExpectedException('Venyii\HipChatCommander\Api\Exception\RateLimitReachedException');
 

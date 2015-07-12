@@ -11,7 +11,7 @@
     },
     "autoload-dev": {
       "psr-4": {
-          "Venyii\\HipChatCommander\\Test\\": "tests",
+          "Venyii\\HipChatCommander\\Test\\": "tests/HipChatCommander/Test",
           "Venyii\\HipChatCommander\\Test\\Package\\": "tests/pkg"
       }
     },

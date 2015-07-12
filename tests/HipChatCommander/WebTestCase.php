@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Venyii\HipChatCommander\Test;
+namespace Venyii\HipChatCommander;
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Monolog\Handler\TestHandler;
@@ -19,6 +19,7 @@ use Silex\WebTestCase as BaseWebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Venyii\HipChatCommander\Config\Config;
+use Venyii\HipChatCommander\Test\Mock\ApiClientMock;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -32,7 +33,7 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     protected function getPackageName()
     {
-        return;
+        return null;
     }
 
     /**
@@ -40,7 +41,7 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     protected function getPackageClass()
     {
-        return;
+        return null;
     }
 
     /**
@@ -48,13 +49,17 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../src/bootstrap.php';
+        $app = require __DIR__.'/../../src/bootstrap.php';
         $app['debug'] = true;
         $app['exception_handler']->disable();
 
         $app['logger'] = new Logger('TestLogger', [new TestHandler()]);
 
         $app['hc.cache_dir'] = $app['hc.cache_dir'].'/tests';
+
+        $app['hc.api_client'] = $app->protect(function ($clientId) use ($app) {
+            return new ApiClientMock($clientId, $app['hc.config'], $app['hc.api_registry'], $app['hc.http_client'], $app['logger']);
+        });
 
         if ($pkgName = $this->getPackageName()) {
             $this->cache = $app['hc.pkg_cache']($pkgName);
@@ -63,11 +68,16 @@ abstract class WebTestCase extends BaseWebTestCase
         return $app;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->clearTestingCache();
+
+        $this->app['hc.api_registry']->install('__oauthId__', '__oauthSecret__', 963852);
     }
 
     /**
@@ -96,15 +106,14 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @param array  $data
-     * @param string $uri
+     * @param array $data
      *
      * @return Response
      */
-    protected function request(array $data = array(), $uri = '/bot')
+    protected function request(array $data = array())
     {
         $client = $this->createClient();
-        $client->request('POST', $uri, [], [], [], json_encode($data));
+        $client->request('POST', '/bot', [], [], [], json_encode($data));
 
         return $client->getResponse();
     }
@@ -138,6 +147,9 @@ abstract class WebTestCase extends BaseWebTestCase
         ];
     }
 
+    /**
+     * @param string|null $yml
+     */
     protected function createTestConfig($yml = null)
     {
         if (!$yml) {

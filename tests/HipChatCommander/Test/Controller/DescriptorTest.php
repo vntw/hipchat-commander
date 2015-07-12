@@ -11,7 +11,7 @@
 
 namespace Venyii\HipChatCommander\Test\Controller;
 
-use Venyii\HipChatCommander\Test\WebTestCase;
+use Venyii\HipChatCommander\WebTestCase;
 
 class DescriptorTest extends WebTestCase
 {

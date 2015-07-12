@@ -13,8 +13,8 @@ use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation;
 use Venyii\HipChatCommander\Controller;
 
-$app->mount('/bot', new Controller\Bot());
 $app->mount('/cb', new Controller\Callback());
+$app->mount('', new Controller\Bot());
 $app->mount('', new Controller\Descriptor());
 
 $app->error(function (\Exception $e) use ($app) {

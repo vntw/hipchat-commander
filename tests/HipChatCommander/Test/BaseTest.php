@@ -12,6 +12,7 @@
 namespace Venyii\HipChatCommander\Test;
 
 use Silex\Application;
+use Venyii\HipChatCommander\WebTestCase;
 
 class BaseTest extends WebTestCase
 {
@@ -20,7 +21,7 @@ class BaseTest extends WebTestCase
         $this->setExpectedException('Exception', 'Invalid request');
 
         $client = $this->createClient();
-        $client->request('POST', '/bot/addon');
+        $client->request('POST', '/bot');
     }
 
     public function testDescriptorFile()

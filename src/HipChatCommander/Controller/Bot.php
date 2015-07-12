@@ -36,8 +36,7 @@ class Bot implements ControllerProviderInterface
         /* @var $router ControllerCollection */
         $router = $app['controllers_factory'];
 
-        $router->post('/addon', array($this, 'addonBotAction'));
-        $router->post('/simple', array($this, 'simpleBotAction'));
+        $router->post('/bot', [$this, 'botAction']);
 
         return $router;
     }
@@ -49,36 +48,10 @@ class Bot implements ControllerProviderInterface
      *
      * @throws \Exception
      */
-    public function addonBotAction(Request $request)
+    public function botAction(Request $request)
     {
-        return $this->botAction(Api\Request::REQ_TYPE_ADDON, $request);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws \Exception
-     */
-    public function simpleBotAction(Request $request)
-    {
-        return $this->botAction(Api\Request::REQ_TYPE_SIMPLE, $request);
-    }
-
-    /**
-     * @param string  $type
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws \Exception
-     */
-    private function botAction($type, Request $request)
-    {
-        $apiRequest = new Api\Request($request, $type);
-
-        $this->validateApiRequest($type, $apiRequest);
+        $apiRequest = new Api\Request($request);
+        $this->validateApiRequest($apiRequest);
 
         /* @var \Venyii\HipChatCommander\Config\Room $room */
         $room = $this->app['hc.config']->getRoomById($apiRequest->getRoom()->getId());
@@ -135,7 +108,7 @@ class Bot implements ControllerProviderInterface
         }
 
         $pkgCache = $this->app['hc.pkg_cache']($roomPackage->getCacheNs() ?: $apiRequest->getClientId(), $package->getName());
-        $apiClient = $this->app['hc.api_client']($apiRequest->getClientId(), $apiRequest->getType());
+        $apiClient = $this->app['hc.api_client']($apiRequest->getClientId());
 
         /** @var Api\Response $response */
         $response = $package
@@ -154,21 +127,17 @@ class Bot implements ControllerProviderInterface
     }
 
     /**
-     * @param string      $type
      * @param Api\Request $apiRequest
      *
      * @throws \Exception
      */
-    private function validateApiRequest($type, Api\Request $apiRequest)
+    private function validateApiRequest(Api\Request $apiRequest)
     {
-        if ($type === Api\Request::REQ_TYPE_ADDON) {
-            try {
-                $this->app['hc.api_request_validator']->validate($apiRequest);
-            } catch (\Exception $e) {
-                $this->app['logger']->error('Failed validating the request: '.$e->getMessage());
-
-                throw $e;
-            }
+        try {
+            $this->app['hc.api_request_validator']->validate($apiRequest);
+        } catch (\Exception $e) {
+            $this->app['logger']->error('Failed validating the request: '.$e->getMessage());
+            throw $e;
         }
     }
 

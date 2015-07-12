@@ -14,7 +14,7 @@ namespace Venyii\HipChatCommander\Test\Controller;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use Monolog\Logger;
-use Venyii\HipChatCommander\Test\WebTestCase;
+use Venyii\HipChatCommander\WebTestCase;
 
 class CallbackTest extends WebTestCase
 {

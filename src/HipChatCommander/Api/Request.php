@@ -11,7 +11,6 @@
 
 namespace Venyii\HipChatCommander\Api;
 
-use Assert\Assertion;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Venyii\HipChatCommander\Api\Request\Room;
 use Venyii\HipChatCommander\Api\Request\User;
@@ -22,7 +21,6 @@ class Request
     const REQ_TYPE_ADDON = 'addon';
 
     private $httpRequest;
-    private $type;
     private $data;
     private $clientId;
     private $package;
@@ -32,15 +30,13 @@ class Request
 
     /**
      * @param HttpRequest $httpRequest
-     * @param string      $type
      *
      * @throws \Exception
      */
-    public function __construct(HttpRequest $httpRequest, $type)
+    public function __construct(HttpRequest $httpRequest)
     {
         $this->httpRequest = $httpRequest;
 
-        $this->setType($type);
         $this->parseHttpRequest();
 
         $this->clientId = $this->data['oauth_client_id'];
@@ -102,24 +98,6 @@ class Request
     public function getRoom()
     {
         return $this->room;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    private function setType($type)
-    {
-        Assertion::inArray($type, [self::REQ_TYPE_SIMPLE, self::REQ_TYPE_ADDON]);
-
-        $this->type = $type;
     }
 
     private function parseHttpRequest()

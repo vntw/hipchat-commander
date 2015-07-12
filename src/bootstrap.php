@@ -76,12 +76,16 @@ $app['hc.api_registry'] = $app->share(function () use ($app) {
     return new Api\Client\Registry($app['hc.cache']);
 });
 
-$app['hc.api_client'] = $app->protect(function ($clientId, $requestType = null) use ($app) {
-    return new Api\Client($clientId, $app['hc.config'], $app['hc.api_registry'], new GuzzleClient(), $app['logger'], $requestType);
+$app['hc.api_client'] = $app->protect(function ($clientId) use ($app) {
+    return new Api\Client($clientId, $app['hc.config'], $app['hc.api_registry'], $app['hc.http_client'], $app['logger']);
 });
 
 $app['hc.api_request_validator'] = $app->share(function () use ($app) {
     return new Api\Request\Validator($app['hc.api_registry']);
+});
+
+$app['hc.http_client'] = $app->share(function () use ($app) {
+    return new GuzzleClient();
 });
 
 $app->register(new MonologServiceProvider(), array(

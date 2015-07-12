@@ -17,7 +17,6 @@ use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Stream\Stream;
 use Psr\Log\LoggerInterface;
-use Venyii\HipChatCommander\Api\Request as ApiRequest;
 use Venyii\HipChatCommander\Config\Config;
 
 class Client
@@ -29,7 +28,6 @@ class Client
     private $registry;
     private $httpClient;
     private $logger;
-    private $requestType;
 
     /**
      * @param string          $clientId
@@ -37,45 +35,32 @@ class Client
      * @param Client\Registry $registry
      * @param GuzzleClient    $httpClient
      * @param LoggerInterface $logger
-     * @param string|null     $requestType
      */
-    public function __construct($clientId, Config $config, Client\Registry $registry, GuzzleClient $httpClient, LoggerInterface $logger, $requestType = null)
+    public function __construct($clientId, Config $config, Client\Registry $registry, GuzzleClient $httpClient, LoggerInterface $logger)
     {
         $this->clientId = $clientId;
         $this->config = $config;
         $this->registry = $registry;
         $this->httpClient = $httpClient;
         $this->logger = $logger;
-        $this->requestType = $requestType;
     }
 
     /**
      * @param string $uri
      * @param array  $data
      *
-     * @return ResponseInterface
-     *
      * @throws \Exception
      */
     public function send($uri, array $data)
     {
-        if ($this->requestType !== ApiRequest::REQ_TYPE_ADDON) {
-            // only addon can send api requests
-            $this->logger->debug('Tried to send request in non-addon mode');
-
-            return;
-        }
-
         $this->logger->debug('API Request: '.$uri);
 
         if ($this->getAuthToken() === null) {
             $this->renewAuthToken();
         }
 
-        $response = null;
-
         try {
-            $response = $this->doSend($uri, $data);
+            $this->doSend($uri, $data);
         } catch (RequestException $e) {
             $this->logger->error($e->getMessage());
 
@@ -97,8 +82,6 @@ class Client
                     throw $e;
             }
         }
-
-        return $response;
     }
 
     /**
