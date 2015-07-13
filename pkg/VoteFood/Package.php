@@ -291,7 +291,8 @@ class Package extends AbstractPackage
                 return Response::createError('Nobody voted yet, looks like you`ll have to choose on your own this time!');
             }
 
-            $user = array_pop(array_keys($userVotes));
+            $lastUserVotes = array_keys($userVotes);
+            $user = end($lastUserVotes);
         }
 
         if (!isset($userVotes[$user])) {
