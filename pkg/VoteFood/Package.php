@@ -284,8 +284,15 @@ class Package extends AbstractPackage
     public function ackCmd()
     {
         $user = $this->getRequest()->getArg(1);
-
         $userVotes = $this->getVotes();
+
+        if ($user === null) {
+            if (empty($userVotes)) {
+                return Response::createError('Nobody voted yet, looks like you`ll have to choose on your own this time!');
+            }
+
+            $user = end(array_keys($userVotes));
+        }
 
         if (!isset($userVotes[$user])) {
             return Response::createError(sprintf('Could not find any vote for user `%s`', $user));

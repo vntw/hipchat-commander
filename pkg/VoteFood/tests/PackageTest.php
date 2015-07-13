@@ -505,8 +505,8 @@ YML;
     public function testAckCmd()
     {
         $this->request($this->buildDummyData('/essen init'));
-
         $this->request($this->buildDummyData('/essen vote mcd bk kantina', 31337, 'leader', 'leader'));
+
         $response = $this->request($this->buildDummyData('/essen ack leader', 31338, 'follower', 'follower'));
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -515,6 +515,36 @@ YML;
         $responseJson = json_decode($response->getContent(), true);
 
         $this->assertEquals('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>leader&nbsp;&nbsp;</td><td>follower&nbsp;&nbsp;</td></tr><tr><td>[2]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[2]</td><td>McDonalds&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[2]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr></table>', $responseJson['message']);
+    }
+
+    public function testAckCmdWithoutMentionAppliesLastVote()
+    {
+        $this->request($this->buildDummyData('/essen init'));
+        $this->request($this->buildDummyData('/essen vote sub cw', 31337, 'leader', 'leader'));
+        $this->request($this->buildDummyData('/essen vote mcd bk kantina', 31337, 'homer', 'homerJ'));
+
+        $response = $this->request($this->buildDummyData('/essen ack', 31338, 'follower', 'follower'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+
+        $responseJson = json_decode($response->getContent(), true);
+
+        $this->assertEquals('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>leader&nbsp;&nbsp;</td><td>homerJ&nbsp;&nbsp;</td><td>follower&nbsp;&nbsp;</td></tr><tr><td>[2]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[2]</td><td>McDonalds&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[2]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[1]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;-</td><td>&nbsp;-</td></tr></table>', $responseJson['message']);
+    }
+
+    public function testAckCmdWithoutMentionButWithoutVotesReturnsError()
+    {
+        $this->request($this->buildDummyData('/essen init'));
+
+        $response = $this->request($this->buildDummyData('/essen ack', 31338, 'follower', 'follower'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+
+        $responseJson = json_decode($response->getContent(), true);
+
+        $this->assertEquals('(failed) Nobody voted yet, looks like you`ll have to choose on your own this time!', $responseJson['message']);
     }
 
     public function testAckWithoutVotes()
