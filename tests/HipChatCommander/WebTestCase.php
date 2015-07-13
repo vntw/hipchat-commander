@@ -78,6 +78,7 @@ abstract class WebTestCase extends BaseWebTestCase
         $this->clearTestingCache();
 
         $this->app['hc.api_registry']->install('__oauthId__', '__oauthSecret__', 963852);
+        $this->app['hc.api_registry']->updateCreds('__oauthId__', '__oauthSecret__', '__authToken__', new \DateTime('+1 hour'));
     }
 
     /**
