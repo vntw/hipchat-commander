@@ -115,6 +115,7 @@ class Bot implements ControllerProviderInterface
             ->setRequest($apiRequest)
             ->setCache($pkgCache)
             ->setApiClient($apiClient)
+            ->setHttpCLient($this->app['hc.http_client'])
             ->setLogger($this->app['logger'])
             ->setOptions($roomPackage->getOptions())
             ->{$methodName}();

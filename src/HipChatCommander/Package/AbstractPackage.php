@@ -12,6 +12,7 @@
 namespace Venyii\HipChatCommander\Package;
 
 use Doctrine\Common\Cache\Cache;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
 use Psr\Log\LoggerInterface;
 use Venyii\HipChatCommander\Api;
 use Venyii\HipChatCommander\Package\Command\HelpTable;
@@ -57,6 +58,11 @@ abstract class AbstractPackage
      * @var Api\Client
      */
     private $client;
+
+    /**
+     * @var HttpClientInterface
+     */
+    private $httpClient;
 
     /**
      * @var LoggerInterface
@@ -167,6 +173,18 @@ abstract class AbstractPackage
     }
 
     /**
+     * @param HttpClientInterface $client
+     *
+     * @return $this
+     */
+    public function setHttpCLient(\GuzzleHttp\ClientInterface $client)
+    {
+        $this->httpClient = $client;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setLogger(LoggerInterface $logger)
@@ -259,6 +277,14 @@ abstract class AbstractPackage
         $uri = sprintf('room/%d/notification', $this->request->getRoom()->getId());
 
         $this->client->send($uri, $response->toArray());
+    }
+
+    /**
+     * @return HttpClientInterface
+     */
+    protected function getHttpClient()
+    {
+        return $this->httpClient;
     }
 
     /**

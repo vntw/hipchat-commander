@@ -11,4 +11,5 @@ config/config.yml
 !logs/.gitkeep
 
 !pkg/HelloWorld
+!pkg/Random
 !pkg/VoteFood

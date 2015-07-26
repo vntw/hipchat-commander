@@ -61,6 +61,12 @@ abstract class WebTestCase extends BaseWebTestCase
             return new ApiClientMock($clientId, $app['hc.config'], $app['hc.api_registry'], $app['hc.http_client'], $app['logger']);
         });
 
+        $httpClientMock = $this->getMock('\GuzzleHttp\Client');
+
+        $app['hc.http_client'] = $app->share(function () use ($app, $httpClientMock) {
+            return $httpClientMock;
+        });
+
         if ($pkgName = $this->getPackageName()) {
             $this->cache = $app['hc.pkg_cache']($pkgName);
         }
@@ -161,6 +167,7 @@ abstract class WebTestCase extends BaseWebTestCase
 packages:
   - Venyii\HipChatCommander\Package\HelloWorld
   - Venyii\HipChatCommander\Test\Package\Dummy1
+
 YML;
             }
 
@@ -191,6 +198,14 @@ YML;
         $this->app['hc.config'] = $this->app->share(function () use ($configFile) {
             return Config::loadYaml(file_get_contents($configFile));
         });
+    }
+
+    /**
+     * @return \GuzzleHttp\Client|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getHttpClientMock()
+    {
+        return $this->app['hc.http_client'];
     }
 
     private function clearTestingCache()
