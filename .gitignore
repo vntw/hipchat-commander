@@ -12,4 +12,5 @@ config/config.yml
 
 !pkg/HelloWorld
 !pkg/Random
+!pkg/Crypt
 !pkg/VoteFood
