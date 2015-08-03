@@ -315,8 +315,9 @@ class Package extends AbstractPackage
     {
         $stores = $this->getStores();
         $userVotes = $this->getVotes();
+        $abstains = $this->getAbstains();
 
-        if (empty($userVotes)) {
+        if (empty($userVotes) && empty($abstains)) {
             return Response::create('Nobody voted yet!');
         }
 
@@ -350,7 +351,7 @@ class Package extends AbstractPackage
      */
     private function renderMatrix(array $matrix)
     {
-        return ResultRenderer::render($matrix, $this->getStoreRanking(), $this->getAbstains());
+        return (new HtmlRenderer($matrix, $this->getStoreRanking(), $this->getAbstains()))->render();
     }
 
     /**

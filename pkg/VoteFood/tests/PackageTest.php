@@ -83,7 +83,7 @@ YML;
         $this->assertEquals('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>andifined&nbsp;&nbsp;</td><td>LucaToni&nbsp;&nbsp;</td><td>Rutegar&nbsp;&nbsp;</td></tr><tr><td>[2]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td><td>&nbsp;✓</td></tr><tr><td>[1]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[2]</td><td>McDonalds&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[2]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;✓</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td><td>&nbsp;-</td></tr></table>', $responseJson['message']);
     }
 
-    public function testStatus()
+    public function testEmptyStatus()
     {
         $response = $this->request($this->buildDummyData('/essen status'));
 
@@ -93,6 +93,21 @@ YML;
         $responseJson = json_decode($response->getContent(), true);
 
         $this->assertEquals('Nobody voted yet!', $responseJson['message']);
+    }
+
+    public function testStatusWithAbstainsAndNoVotes()
+    {
+        $this->request($this->buildDummyData('/essen init'));
+        $this->request($this->buildDummyData('/essen abstain', 32123, 'abstainUser', 'auser'));
+        $this->request($this->buildDummyData('/essen abstain', 1513124, 'abstainUser2', 'auser2'));
+        $response = $this->request($this->buildDummyData('/essen status'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+
+        $responseJson = json_decode($response->getContent(), true);
+
+        $this->assertEquals('<table><tr><td>Abstains: auser, auser2</td></tr></table>', $responseJson['message']);
     }
 
     public function testStoresCmd()
