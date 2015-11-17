@@ -48,8 +48,8 @@ class HelpTable
 <br><br>
 <table>
     <tr>
-        <td>Command</td>
-        <td>Aliases</td>
+        <td>Command&nbsp;&nbsp;</td>
+        <td>Aliases&nbsp;&nbsp;</td>
         <td>Description</td>
     </tr>
     %s

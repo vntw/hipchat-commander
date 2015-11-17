@@ -31,8 +31,8 @@ class HelpTableTest extends \PHPUnit_Framework_TestCase
 <br><br>
 <table>
     <tr>
-        <td>Command</td>
-        <td>Aliases</td>
+        <td>Command&nbsp;&nbsp;</td>
+        <td>Aliases&nbsp;&nbsp;</td>
         <td>Description</td>
     </tr>
     <tr><td>do [default]&nbsp;</td><td>-&nbsp;</td><td>This is the do command&nbsp;</td></tr><tr><td>make&nbsp;</td><td>build, create&nbsp;</td><td>This is some command description&nbsp;</td></tr><tr><td>produce&nbsp;</td><td>-&nbsp;</td><td>-&nbsp;</td></tr>
