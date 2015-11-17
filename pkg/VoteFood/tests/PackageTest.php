@@ -197,6 +197,13 @@ YML;
         $responseJson = json_decode($response->getContent(), true);
         $this->assertEquals('(successful) Successfully added the store!', $responseJson['message']);
 
+        $response = $this->request($this->buildDummyData('/essen mkstore sws Store With Space'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+        $responseJson = json_decode($response->getContent(), true);
+        $this->assertEquals('(successful) Successfully added the store!', $responseJson['message']);
+
         $response = $this->request($this->buildDummyData('/essen stores'));
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -204,13 +211,13 @@ YML;
 
         $responseJson = json_decode($response->getContent(), true);
 
-        $this->assertStringEndsWith(', kol (Kolibri-Tal)', $responseJson['message']);
+        $this->assertStringEndsWith(', sws (Store With Space)', $responseJson['message']);
 
         $response = $this->request($this->buildDummyData('/essen status'));
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
         $responseJson = json_decode($response->getContent(), true);
-        $this->assertEquals('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>andifined&nbsp;&nbsp;</td><td>Rutegar&nbsp;&nbsp;</td></tr><tr><td>[0]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[<b>✔2</b>]</td><td><b>McDonalds&nbsp;&nbsp;</b></td><td><b>&nbsp;✓</b></td><td><b>&nbsp;✓</b></td></tr><tr><td>[1]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Kolibri-Tal&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr></table>', $responseJson['message']);
+        $this->assertEquals('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>andifined&nbsp;&nbsp;</td><td>Rutegar&nbsp;&nbsp;</td></tr><tr><td>[0]</td><td>Kantina&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Döner&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Leo´s&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Metzger&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[<b>✔2</b>]</td><td><b>McDonalds&nbsp;&nbsp;</b></td><td><b>&nbsp;✓</b></td><td><b>&nbsp;✓</b></td></tr><tr><td>[1]</td><td>Burger-King&nbsp;&nbsp;</td><td>&nbsp;✓</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Subway&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Inder&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Grieche&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[1]</td><td>Curry-Wurst&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;✓</td></tr><tr><td>[0]</td><td>Kolibri-Tal&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr><tr><td>[0]</td><td>Store With Space&nbsp;&nbsp;</td><td>&nbsp;-</td><td>&nbsp;-</td></tr></table>', $responseJson['message']);
     }
 
     public function testAddStoreWithExistingVotes()

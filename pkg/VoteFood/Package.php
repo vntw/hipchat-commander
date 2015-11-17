@@ -162,7 +162,11 @@ class Package extends AbstractPackage
     public function mkstoreCmd()
     {
         $storeShort = $this->getRequest()->getArg(1);
-        $storeLong = $this->getRequest()->getArg(2);
+        $storeLong = trim(implode(' ', array_slice($this->getRequest()->getArgs(), 2)));
+
+        if ($storeLong === '') {
+            $storeLong = null;
+        }
 
         if (null === $storeShort || null === $storeLong) {
             return Response::create('(doh) Usage: mkstore name_short name_long', null, Response::COLOR_YELLOW);
