@@ -388,7 +388,18 @@ YML;
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
         $responseJson = json_decode($response->getContent(), true);
-        $this->assertSame('(failed) Unknown store!', $responseJson['message']);
+        $this->assertStringStartsWith('Time To Eat @ ', $responseJson['message']);
+    }
+
+    public function testGoCmdScreamsIfNoVotesAvailable()
+    {
+        $this->request($this->buildDummyData('/essen clear'));
+        $response = $this->request($this->buildDummyData('/essen go'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+        $responseJson = json_decode($response->getContent(), true);
+        $this->assertRegExp('/Nobody voted for anything yet!/', $responseJson['message']);
     }
 
     public function testInitCmd()

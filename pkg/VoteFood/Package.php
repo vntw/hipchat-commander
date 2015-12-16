@@ -87,14 +87,21 @@ class Package extends AbstractPackage
                 $bestValues = array_values($storeRanking);
                 $bestKeys = array_keys($storeRanking);
 
+                if (empty($storeRanking)) {
+                    return Response::createError('Nobody voted for anything yet!');
+                }
+
                 if ($bestValues[0] > $bestValues[1]) {
                     $store = $bestKeys[0];
+                } elseif ($bestValues[0] === $bestValues[1]) {
+                    // flip a coin if multiple stores have the same amount of votes
+                    $store = $this->decideRandomStoreByVoteRanking();
                 }
             }
         }
 
         if (!isset($stores[$store])) {
-            return Response::createError('Unknown store!');
+            return Response::createError('Could not match a store!');
         }
 
         $mentions = [];
@@ -124,6 +131,14 @@ class Package extends AbstractPackage
             return Response::createError('What exactly do you want me to decide? Nobody even voted! (facepalm)');
         }
 
+        return $this->goCmd($this->decideRandomStoreByVoteRanking());
+    }
+
+    /**
+     * @return string
+     */
+    private function decideRandomStoreByVoteRanking()
+    {
         $storeRanking = $this->getStoreRanking();
         $bestValues = array_values($storeRanking);
         $bestKeys = array_keys($storeRanking);
@@ -138,7 +153,7 @@ class Package extends AbstractPackage
 
         shuffle($contestants);
 
-        return $this->goCmd($contestants[0]);
+        return $contestants[0];
     }
 
     /**
