@@ -107,7 +107,13 @@ class HtmlRenderer
                 if ($mat === null || $mat === '') {
                     $this->html .= '&nbsp;';
                 } elseif (is_bool($mat)) {
-                    $this->html .= '&nbsp;'.($mat ? '✓' : '-');
+                    if (strlen($this->matrix[0][$k]) > 2) {
+                        $repeat = floor(strlen($this->matrix[0][$k]) - 3);
+                    } else {
+                        $repeat = 1;
+                    }
+
+                    $this->html .= str_repeat('&nbsp;', $repeat).($mat ? '✓' : '-');
                 } else {
                     $this->html .= (string) $mat.'&nbsp;&nbsp;';
                 }
