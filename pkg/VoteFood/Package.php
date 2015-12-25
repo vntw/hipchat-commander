@@ -360,6 +360,21 @@ class Package extends AbstractPackage
             $i++;
         }
 
+        $users = array_shift($matrix);
+
+        uasort($matrix, function ($a, $b) {
+            $ac = count(array_filter($a));
+            $bc = count(array_filter($b));
+
+            if ($ac === $bc) {
+                return strcmp(array_keys($a)[0], array_keys($b)[0]);
+            }
+
+            return ($ac > $bc) ? -1 : 1;
+        });
+
+        array_unshift($matrix, $users);
+
         return Response::create($this->renderMatrix($matrix), Response::FORMAT_HTML);
     }
 
