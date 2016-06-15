@@ -4,6 +4,9 @@ install:
   allow_room: false
   allow_global: true
 
+packages:
+  - Venyii\HipChatCommander\Package\VoteFood
+
 rooms:
   - id: 232112 # Some Room
     packages:
