@@ -18,7 +18,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuild()
     {
-        $configMock = $this->getMock('\Venyii\HipChatCommander\Config\Config', [], [], '', false);
+        $configMock = $this->createMock(\Venyii\HipChatCommander\Config\Config::class);
         $configMock
             ->expects($this->at(0))
             ->method('get')
@@ -52,7 +52,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildWithCustomOptions()
     {
-        $configMock = $this->getMock('\Venyii\HipChatCommander\Config\Config', [], [], '', false);
+        $configMock = $this->createMock(\Venyii\HipChatCommander\Config\Config::class);
         $configMock
             ->expects($this->at(0))
             ->method('get')
@@ -96,7 +96,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoPackagesThrowsException()
     {
-        $configMock = $this->getMock('\Venyii\HipChatCommander\Config\Config', [], [], '', false);
+        $configMock = $this->createMock(\Venyii\HipChatCommander\Config\Config::class);
         $builder = new Builder('https://commander.com', $configMock, $this->createPackageLoaderMock(true)->getPackages());
         $builder->build();
     }
@@ -118,7 +118,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        $packageLoaderMock = $this->getMock('\Venyii\HipChatCommander\Package\Loader', [], [], '', false);
+        $packageLoaderMock = $this->createMock(\Venyii\HipChatCommander\Package\Loader::class);
         $packageLoaderMock
             ->expects($this->once())
             ->method('getPackages')

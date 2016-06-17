@@ -12,7 +12,6 @@
 namespace Venyii\HipChatCommander\Test;
 
 use Silex\Application;
-use Venyii\HipChatCommander\WebTestCase;
 
 class BaseTest extends WebTestCase
 {

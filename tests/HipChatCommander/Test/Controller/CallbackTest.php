@@ -14,7 +14,7 @@ namespace Venyii\HipChatCommander\Test\Controller;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use Monolog\Logger;
-use Venyii\HipChatCommander\WebTestCase;
+use Venyii\HipChatCommander\Test\WebTestCase;
 
 class CallbackTest extends WebTestCase
 {
@@ -30,17 +30,23 @@ class CallbackTest extends WebTestCase
 
         $authResponse = new Response(200, [], Stream::factory(json_encode(['access_token' => '__authToken__', 'expires_in' => 3600])));
 
-        $httpClientMock = $this->getMock('GuzzleHttp\Client', ['send']);
+        $httpClientMock = $this->getMockBuilder(\GuzzleHttp\Client::class)->setMethods(['send'])->getMock();
         $httpClientMock
             ->expects($this->once())
             ->method('send')
             ->will($this->returnValue($authResponse));
 
-        $clientMock = $this->getMock(
-            'Venyii\HipChatCommander\Api\Client',
-            null,
-            ['__clientId__', $this->app['hc.config'], $this->app['hc.api_registry'], $httpClientMock, $this->app['logger']]
-        );
+        $clientMock = $this->getMockBuilder(\Venyii\HipChatCommander\Api\Client::class)
+            ->setConstructorArgs([
+                '__clientId__',
+                $this->app['hc.config'],
+                $this->app['hc.api_registry'],
+                $httpClientMock,
+                $this->app['logger']
+            ])
+            ->setMethods(null)
+            ->getMock()
+        ;
 
         $this->app['hc.api_client'] = $this->app->protect(function () use ($clientMock) { return $clientMock; });
 
@@ -87,17 +93,23 @@ class CallbackTest extends WebTestCase
 
         $authResponse = new Response(200, [], Stream::factory(json_encode(['access_token' => '__authToken__', 'expires_in' => 3600])));
 
-        $httpClientMock = $this->getMock('GuzzleHttp\Client', ['send']);
+        $httpClientMock = $this->getMockBuilder(\GuzzleHttp\Client::class)->setMethods(['send'])->getMock();
         $httpClientMock
             ->expects($this->once())
             ->method('send')
             ->will($this->returnValue($authResponse));
 
-        $clientMock = $this->getMock(
-            'Venyii\HipChatCommander\Api\Client',
-            null,
-            ['__clientId__', $this->app['hc.config'], $this->app['hc.api_registry'], $httpClientMock, $this->app['logger']]
-        );
+        $clientMock = $this->getMockBuilder(\Venyii\HipChatCommander\Api\Client::class)
+            ->setConstructorArgs([
+                '__clientId__',
+                $this->app['hc.config'],
+                $this->app['hc.api_registry'],
+                $httpClientMock,
+                $this->app['logger']
+            ])
+            ->setMethods(null)
+            ->getMock()
+        ;
 
         $this->app['hc.api_client'] = $this->app->protect(function () use ($clientMock) { return $clientMock; });
 
@@ -192,17 +204,23 @@ class CallbackTest extends WebTestCase
             'roomId' => '986531',
         ];
 
-        $httpClientMock = $this->getMock('GuzzleHttp\Client', ['send']);
+        $httpClientMock = $this->getMockBuilder(\GuzzleHttp\Client::class)->setMethods(['send'])->getMock();
         $httpClientMock
             ->expects($this->once())
             ->method('send')
             ->will($this->throwException(new \Exception('Some error', 599)));
 
-        $clientMock = $this->getMock(
-            'Venyii\HipChatCommander\Api\Client',
-            null,
-            ['__clientId__', $this->app['hc.config'], $this->app['hc.api_registry'], $httpClientMock, $this->app['logger']]
-        );
+        $clientMock = $this->getMockBuilder(\Venyii\HipChatCommander\Api\Client::class)
+            ->setConstructorArgs([
+                '__clientId__',
+                $this->app['hc.config'],
+                $this->app['hc.api_registry'],
+                $httpClientMock,
+                $this->app['logger']
+            ])
+            ->setMethods(null)
+            ->getMock()
+        ;
 
         $this->app['hc.api_client'] = $this->app->protect(function () use ($clientMock) { return $clientMock; });
 

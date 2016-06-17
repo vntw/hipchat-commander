@@ -12,7 +12,6 @@
 namespace Venyii\HipChatCommander\Test;
 
 use Venyii\HipChatCommander\Config\Config;
-use Venyii\HipChatCommander\WebTestCase;
 
 class CacheTest extends WebTestCase
 {

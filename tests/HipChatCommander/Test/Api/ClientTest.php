@@ -16,7 +16,7 @@ use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use Venyii\HipChatCommander\Api;
-use Venyii\HipChatCommander\WebTestCase;
+use Venyii\HipChatCommander\Test\WebTestCase;
 
 class ClientTest extends WebTestCase
 {
@@ -28,14 +28,17 @@ class ClientTest extends WebTestCase
      */
     public function testClientThrowsRateLimitException($code, $class)
     {
-        $this->setExpectedException($class);
+        $this->expectException($class);
         $this->createTestConfig();
 
         $request = new Request('POST', 'http://not-important');
         $response = new Response($code);
         $requestException = new RequestException('Not Important', $request, $response);
 
-        $httpClientMock = $this->getMock('GuzzleHttp\Client', ['send']);
+        $httpClientMock = $this->getMockBuilder(\GuzzleHttp\Client::class)
+            ->setMethods(['send'])
+            ->getMock();
+
         $httpClientMock
             ->expects($this->at(0))
             ->method('send')

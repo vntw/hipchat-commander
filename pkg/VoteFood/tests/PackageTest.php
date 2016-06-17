@@ -11,7 +11,7 @@
 
 namespace Venyii\HipChatCommander\Test\Package\VoteFood;
 
-use Venyii\HipChatCommander\WebTestCase;
+use Venyii\HipChatCommander\Test\WebTestCase;
 
 class PackageTest extends WebTestCase
 {

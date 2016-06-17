@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Venyii\HipChatCommander;
+namespace Venyii\HipChatCommander\Test;
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Monolog\Handler\TestHandler;
@@ -61,7 +61,7 @@ abstract class WebTestCase extends BaseWebTestCase
             return new ApiClientMock($clientId, $app['hc.config'], $app['hc.api_registry'], $app['hc.http_client'], $app['logger']);
         });
 
-        $httpClientMock = $this->getMock('\GuzzleHttp\Client');
+        $httpClientMock = $this->createMock(\GuzzleHttp\Client::class);
 
         $app['hc.http_client'] = $app->share(function () use ($app, $httpClientMock) {
             return $httpClientMock;

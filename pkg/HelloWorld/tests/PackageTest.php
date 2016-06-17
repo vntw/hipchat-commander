@@ -12,7 +12,7 @@
 namespace Venyii\HipChatCommander\Test\Package\HelloWorld;
 
 use Venyii\HipChatCommander\Api\Response;
-use Venyii\HipChatCommander\WebTestCase;
+use Venyii\HipChatCommander\Test\WebTestCase;
 
 class PackageTest extends WebTestCase
 {
