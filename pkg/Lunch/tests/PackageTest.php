@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Venyii\HipChatCommander\Test\Package\VoteFood;
+namespace Venyii\HipChatCommander\Test\Package\Lunch;
 
 use Venyii\HipChatCommander\Test\WebTestCase;
 
@@ -21,12 +21,12 @@ class PackageTest extends WebTestCase
 
         $yml = <<<YML
 packages:
-  - Venyii\HipChatCommander\Package\VoteFood
+  - Venyii\HipChatCommander\Package\Lunch
 
 rooms:
   - id: 7331
     packages:
-      - name: voteFood
+      - name: lunch
         options:
           default_stores:
             kantina: Kantina
@@ -612,7 +612,7 @@ YML;
      */
     protected function getPackageName()
     {
-        return 'voteFood';
+        return 'lunch';
     }
 
     /**
@@ -620,6 +620,6 @@ YML;
      */
     protected function getPackageClass()
     {
-        return 'Venyii\HipChatCommander\Package\VoteFood';
+        return 'Venyii\HipChatCommander\Package\Lunch';
     }
 }

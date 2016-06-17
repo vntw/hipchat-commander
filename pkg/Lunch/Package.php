@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Venyii\HipChatCommander\Package\VoteFood;
+namespace Venyii\HipChatCommander\Package\Lunch;
 
 use Venyii\HipChatCommander\Package\AbstractPackage;
 use Venyii\HipChatCommander\Api\Response;
@@ -26,7 +26,7 @@ class Package extends AbstractPackage
     public function configure()
     {
         $this
-            ->setName('voteFood')
+            ->setName('lunch')
             ->setDescription('Vote for your favourite food store and decide where to eat with your team.')
             ->setAliases(['essen'])
             ->addCommand('help')
@@ -37,10 +37,10 @@ class Package extends AbstractPackage
             ->addCommand('vote', 'Vote for one or more stores. Calling this multiple times will overwrite your previous vote.')
             ->addCommand('decide', 'Randomly decide where to eat.')
             ->addCommand('abstain', 'Abstain from the current vote.')
-            ->addCommand('mkstore', 'Add a custom store. Usage: /voteFood mkstore <store_short> <Store>')
-            ->addCommand('rmstore', 'Remove a custom store. Usage: /voteFood rmstore <store_short>')
+            ->addCommand('mkstore', 'Add a custom store. Usage: /lunch mkstore <store_short> <Store>')
+            ->addCommand('rmstore', 'Remove a custom store. Usage: /lunch rmstore <store_short>')
             ->addCommand('go', 'Notify all voters that it´s time to go. The store is optional.', ['notify'])
-            ->addCommand('ack', 'Accept another users vote. Usage: /voteFood ack <user>')
+            ->addCommand('ack', 'Accept another users vote. Usage: /lunch ack <user>')
         ;
     }
 

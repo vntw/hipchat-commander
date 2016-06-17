@@ -5,12 +5,12 @@ install:
   allow_global: true
 
 packages:
-  - Venyii\HipChatCommander\Package\VoteFood
+  - Venyii\HipChatCommander\Package\Lunch
 
 rooms:
   - id: 232112 # Some Room
     packages:
-      - name: voteFood
+      - name: lunch
         cache_ns: dev
         restrict:
           user: [23443]

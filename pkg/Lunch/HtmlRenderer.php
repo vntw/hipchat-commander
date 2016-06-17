@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Venyii\HipChatCommander\Package\VoteFood;
+namespace Venyii\HipChatCommander\Package\Lunch;
 
 class HtmlRenderer
 {
