@@ -48,6 +48,9 @@ options.
 ### Bot
 * Add a new (global) integration to your HipChat account and use the following URL: ```<domain.tld>/package.json```
 
+## PHPCS
+`./vendor/bin/php-cs-fixer fix --config-file .php_cs`
+
 ## ToDo
 * Separate packages
 

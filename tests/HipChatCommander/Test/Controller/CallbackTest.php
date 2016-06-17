@@ -42,7 +42,7 @@ class CallbackTest extends WebTestCase
                 $this->app['hc.config'],
                 $this->app['hc.api_registry'],
                 $httpClientMock,
-                $this->app['logger']
+                $this->app['logger'],
             ])
             ->setMethods(null)
             ->getMock()
@@ -105,7 +105,7 @@ class CallbackTest extends WebTestCase
                 $this->app['hc.config'],
                 $this->app['hc.api_registry'],
                 $httpClientMock,
-                $this->app['logger']
+                $this->app['logger'],
             ])
             ->setMethods(null)
             ->getMock()
@@ -216,7 +216,7 @@ class CallbackTest extends WebTestCase
                 $this->app['hc.config'],
                 $this->app['hc.api_registry'],
                 $httpClientMock,
-                $this->app['logger']
+                $this->app['logger'],
             ])
             ->setMethods(null)
             ->getMock()
